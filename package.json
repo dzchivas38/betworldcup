@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "angular": "^1.6.4",
+    "angular-ui-bootstrap": "^2.5.0",
+    "angular-ui-router": "^1.0.3",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1",
+    "simple-line-icons": "^2.4.1",
+    "textangular": "^1.5.16"
+  },
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "dungnv",
+  "license": "ISC"
+}
