@@ -1,8 +1,13 @@
-﻿<div class="body-content">
+﻿<script>
+    $(function() {
+        $("#searchDate-12").datepicker();
+    });
+</script>
+<div class="body-content" ng-controller="HomeController">
     <div class="content-ti">
         <div class="row">
             <div class="col-sm-12 col-xs-12">
-                <span class="caption-subject">The Home Page</span>
+                <span class="caption-subject">Trang chủ</span>
             </div>
             <div class="col-sm-12">
                 <hr style="margin-top:0px !important;margin-bottom:10px !important;" />
@@ -10,14 +15,24 @@
         </div>
         <div class="row">
             <div class="col-sm-12 col-xs-12">
-                <p>This page demonstrates <span class="text-danger">nested</span> views.</p>
-                <a ui-sref=".list" class="btn btn-primary">List</a>
-                <a ui-sref=".paragraph" class="btn btn-danger">Paragraph</a>
+                <div class="col-sm-2">
+                    <span>Chọn ngày tháng:</span>
+                </div>
+                <div class="col-sm-4">
+                    <input style="height: 30px !important;" ng-model="searchDate" id="searchDate" class="form-control txtDateTime" type="text">
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-sm btn-default"
+                            type="button" ng-click="search">
+                        <i class="fa fa-search font-green-jungle"></i>
+                        <span>Tìm kiếm</span>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 col-xs-12">
-                <div ui-view></div>
+
             </div>
         </div>
     </div>
