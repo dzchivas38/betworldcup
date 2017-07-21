@@ -7,6 +7,9 @@
 
          <script src="{!! url('statics/angular/angular.min.js') !!}"></script>
          <script src="{!! url('statics/jquery/dist/jquery.min.js') !!}"></script>
+
+        <script src="{!! url('statics/jquery/dist/jquery.datetimepicker.js') !!}"></script>
+
          <script src="{!! url('statics/bootstrap/dist/js/bootstrap.min.js') !!}"></script>
          <script src="{!! url('statics/angular-ui-router/release/angular-ui-router.min.js') !!}"></script>
          <script src="{!! url('statics/angular/angular-block-ui.min.js') !!}"></script>
@@ -24,11 +27,19 @@
         <link href="{!! url('css/font-awesome/css/font-awesome.min.css') !!}" rel="stylesheet " type="text/css " />
         <link href="{!! url('css/simple-line-icon/simple-line-icons.css') !!}" rel="stylesheet " type="text/css " />
         <link href="{!! url('css/textangular/dist/textAngular.css') !!}" rel="stylesheet " type="text/css " />
+        <link href="{!! url('statics/jquery/dist/jquery.datetimepicker.css') !!}" rel="stylesheet " type="text/css " />
         <link href="{!! url('custom.css') !!}" rel="stylesheet " type="text/css " />
 
-         <!-----CONTROLLER----- -->
         <script src="{!! url('app.js') !!}"></script>
-        <script src="{!! url('js/PlayerListController.js') !!}"></script>
+
+        {{--------------------------SERVICES------------------------------}}
+        <script type="text/javascript" src="{!! url('js/services/PlayerService.js') !!}"></script>
+        {{--------------------------ENDSERVICES---------------------------}}
+         <!-----CONTROLLER----- -->
+
+        <script src="{!! url('js/controller/PlayerListController.js') !!}"></script>
+        <script src="{!! url('js/controller/HomeController.js') !!}"></script>
+        <script src="{!! url('js/controller/SyntaxListController.js') !!}"></script>
         <!-- ---ENDCONTROLLER----- -->
     </head>
     <body style="overflow: hidden;">

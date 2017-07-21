@@ -203,3 +203,11 @@
 .sidebar-nav .sidebar-nav-custom a span {
     font-size: 13px;
 }
+.font-green-jungle {
+    color: #6bcc0f;
+}
+.btn-green {
+    color: #fff;
+    background-color: #6bcc0f !important;
+    border-color: #6bcc0f !important;
+}
