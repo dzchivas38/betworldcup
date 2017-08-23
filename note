@@ -1,0 +1,4 @@
+cp .env.example .env
+php artisan key:generate
+//tạo mới 1 file command tên DemoCron
+php artisan make:console DemoCron --command=demo:cron
