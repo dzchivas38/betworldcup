@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Inspire::class,
         Commands\DemoCron::class,
+        Commands\getResultNumberScheduce::class,
     ];
 
     /**
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('demo:cron')
+            ->everyMinute();
+        $schedule->command('command:getResultNumber')
             ->everyMinute();
     }
 }

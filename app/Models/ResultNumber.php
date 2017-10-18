@@ -102,4 +102,13 @@ class ResultNumber
     {
         $this->isDelete = $isDelete;
     }
+    public function jsonSerialize() {
+        return [
+            'Id' => $this->Id,
+            'Title' => $this->Title,
+            'description' => $this->description,
+            'pubDate' => $this->pubDate,
+            'isDelete' => $this->isDelete
+        ];
+    }
 }

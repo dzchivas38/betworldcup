@@ -17,3 +17,5 @@ Route::get('/', function () {
 Route::get('/api-get-player', 'PlayerController@getAll');
 
 Route::get('/api-get-result-resource', 'HomeController@getNumberResultEveryDay');
+
+Route::get('/test', 'HomeController@getNumberResultEveryDay');

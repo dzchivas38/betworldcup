@@ -1,18 +1,43 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use DOMDocument;
-use DateTime;
-use PhpParser\Node\Expr\Cast\Object_;
-use App\Models\ResultNumber;
-use Carbon\Carbon;
+use Faker\Provider\DateTime;
+use Illuminate\Console\Command;
+use DB;
 
-class HomeController extends Controller
+class getResultNumberScheduce extends Command
 {
-    public function getNumberResultEveryDay()
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'command:getResultNumber';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Job lay ket qua xo so hang ngày';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
     {
         $rss_tags = array(
             'title','description','pubDate','link'
@@ -37,10 +62,10 @@ class HomeController extends Controller
                 $result_net->setPubDate($key['pubDate']);
                 break;
             }
-            //dd($result_net->jsonSerialize());
-            return $result_net->jsonSerialize();
+            return $result_net;
         } catch (Exception $e) {
             return $e;
         }
+        DB::table('tbl_player')->insert(['Name'=>'hello new']);
     }
 }
