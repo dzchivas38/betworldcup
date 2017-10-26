@@ -17,10 +17,9 @@
 
         return service;
         function getResultScheduce() {
-            var url = 'api-get-result-resource';
-            return getMethodService(url,null);
+            var url = 'api-get-result-resource/';
+            return getMethodService(url,{ params : 4});
         }
-
         function getMethodService(restUrl,data) {
             var dfd = $q.defer();
             $http.get(restUrl, data,

@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use Faker\Provider\DateTime;
 use Illuminate\Console\Command;
+use DOMDocument;
 use DB;
+use App\Models\ResultNumber;
 
 class getResultNumberScheduce extends Command
 {
@@ -59,13 +61,15 @@ class getResultNumberScheduce extends Command
             foreach ($rss_array as $key){
                 $result_net->setTitle($key['title']);
                 $result_net->setDescription($key['description']);
-                $result_net->setPubDate($key['pubDate']);
+                $now = new \DateTime();
+                $result_net->setPubDate($now->format('Y-m-d-H-i-s'));
+                $result_net->setIsDelete(false);
                 break;
             }
-            return $result_net;
+            DB::table('tbl_result_number')->insert($result_net->jsonSerialize());
         } catch (Exception $e) {
             return $e;
         }
-        DB::table('tbl_player')->insert(['Name'=>'hello new']);
+
     }
 }

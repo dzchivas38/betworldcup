@@ -106,8 +106,8 @@ class ResultNumber
         return [
             'Id' => $this->Id,
             'Title' => $this->Title,
-            'description' => $this->description,
-            'pubDate' => $this->pubDate,
+            'Description' => $this->description,
+            'PubDate' => $this->pubDate,
             'isDelete' => $this->isDelete
         ];
     }
