@@ -2,3 +2,7 @@ cp .env.example .env
 php artisan key:generate
 //tạo mới 1 file command tên DemoCron
 php artisan make:console DemoCron --command=demo:cron
+//Khi clone source về môi  trường mới cần update lại các dependencies qua composer
+composer update --no-scripts
+
+php artisan serve --port=8080
