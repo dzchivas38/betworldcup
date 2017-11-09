@@ -13,10 +13,16 @@ class HomeController extends Controller
 {
     public function getNumberResultEveryDay()
     {
+
     }
-    public function getItem($id)
+    public function getItem($pubDate)
     {
-        $results = DB::select('select * from tbl_result_number where Id = :id', ['id' => $id]);
-        return $results;
+        try {
+            $results = DB::table('tbl_result_number')->whereDate('PubDate', '=',$pubDate)->get();
+            return $results;
+        }
+        catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

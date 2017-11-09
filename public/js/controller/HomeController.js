@@ -12,18 +12,77 @@
 
     function HomeController($scope,$homeSvc,$uibModal,toastr) {
         $scope.title = 'HomeController';
+        $scope.data={};
+        $scope.search = function () {
+            $scope.searchDate = $('#searchDate').val();
+            formLoad($scope.searchDate);
+
+        };
         formLoad();
-        function formLoad() {
-            $homeSvc.getResultScheduce().then(function (item) {
-               console.log(item);
+        function formLoad(keySearch) {
+            var now = moment().format('YYYY-MM-DD');
+            var result = [];
+            keySearch = (keySearch) ? keySearch : now;
+            $homeSvc.getResultScheduce(keySearch).then(function (item) {
+                if(_.get(item,"length") > 0){
+                    _.set($scope,"data",item[0]);
+                    result = $scope.data.Description.split('\n');
+                    _.pullAt(result, [0]);
+                    var count = 0;
+                    var temp = _.map(result,function (num) {
+                        var value = num.substring(num.indexOf(':') + 2);
+                        var key = "";
+                        var colspan=0;
+                        switch (count) {
+                            case 0:
+                                key = "Giải đặc biệt";
+                                colspan = 6;
+                                break;
+                            case 1:
+                                key = "Giải nhất";
+                                colspan = 6;
+                                break;
+                            case 2:
+                                key = "Giải nhì";
+                                colspan = 3;
+                                break;
+                            case 3:
+                                key = "Giải ba";
+                                colspan = 1;
+                                break;
+                            case 4:
+                                key = "Giải tư";
+                                colspan = 1;
+                                break;
+                            case 5:
+                                key = "Giải năm";
+                                colspan = 1;
+                                break;
+                            case 6:
+                                key = "Giải sáu";
+                                colspan = 2;
+                                break;
+                            case 7:
+                                key = "Giải bảy";
+                                colspan = 1;
+                                break;
+                        }
+                        count++;
+                        return {key : key, value :_.split(value, ' - '), colspan : colspan}
+                    });
+                    _.set($scope,"data.Description",temp);
+                }else {
+                    //to do
+                }
             });
         };
+
         $(function () {
             $('.txtDateTime').datetimepicker({
                 dayOfWeekStart: 1,
                 lang: 'vi',
-                startDate: '2014/10/10',
-                format: 'd/m/Y',
+                startDate: '2014-10-10',
+                format: 'Y-m-d',
                 dateonly: false,
                 showHour: false,
                 closeOnDateSelect: true,
