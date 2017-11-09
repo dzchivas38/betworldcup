@@ -35,6 +35,7 @@
         <link href="{!! url('custom.css') !!}" rel="stylesheet " type="text/css " />
 
         <script src="{!! url('app.js') !!}"></script>
+        <script src="{!! url('js/scopeFunction.js') !!}"></script>
         {{---------------------------MODAL-------------------------------}}
         <script src="{!! url('template/Modal/playerFormController.js') !!}"></script>
         <script src="{!! url('template/Modal/actionTypeFormController.js') !!}"></script>
