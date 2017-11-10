@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mg-top-20">
+        <div class="row mg-top-20" ng-if="data.Description">
             <div class="col-sm-8 col-xs-12">
                 <div class="table-responsive">
                     <div class="table-scrollable thin">
@@ -44,7 +44,7 @@
                             <tbody>
                             <tr ng-repeat="row in data.Description">
                                 <td>{{row.key}}</td>
-                                <td ng-repeat="num in row.value" colspan="{{row.colspan}}"><span>{{num}}</span></td>
+                                <td ng-repeat="num in row.value" colspan="{{row.colspan}}"><span ng-style="row.style">{{num}}</span></td>
                             </tr>
                             <!--<tr>-->
                                 <!--<td>Giải đặc biệt</td>-->
@@ -56,6 +56,9 @@
 
                 </div>
             </div>
+        </div>
+        <div class="row mg-top-20" ng-if="!data.Description">
+            <span style="margin-left: 30px;" class="font-red">Không có dữ liệu để hiển thị</span>
         </div>
     </div>
 </div>

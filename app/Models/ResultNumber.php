@@ -15,10 +15,6 @@ class ResultNumber
     private $pubDate;
     private $isDelete;
 
-    /**
-     * ResultNumber constructor.
-     * @param $Id
-     */
     public function __construct()
     {
     }
