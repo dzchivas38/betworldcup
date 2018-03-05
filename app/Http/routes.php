@@ -19,4 +19,4 @@ Route::get('/api-get-player', 'PlayerController@getAll');
 //Route::get('/api-get-result-resource', 'HomeController@getNumberResultEveryDay');
 Route::get('api-get-result-resource/{pubDate}', 'HomeController@getItem');
 
-//Route::get('/test', 'HomeController@getNumberResultEveryDay');
+Route::get('/test', 'HomeController@test');

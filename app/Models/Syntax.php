@@ -7,7 +7,7 @@
  */
 
 namespace App\Models;
-
+use DB;
 
 class Syntax
 {
@@ -85,5 +85,22 @@ class Syntax
     public function setDescription($Description)
     {
         $this->Description = $Description;
+    }
+    public function jsonSerialize() {
+        return [
+            'Id' => $this->Id,
+            'Name' => $this->Name,
+            'ActionTypeId' => $this->ActionTypeId,
+            'Description' => $this->Description
+        ];
+    }
+    public function getAll(){
+        try {
+            $results = DB::table('tbl_syntax')->get();
+            return $results;
+        }
+        catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

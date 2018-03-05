@@ -7,7 +7,7 @@
  */
 
 namespace App\Models;
-
+use DB;
 
 class ActionType
 {
@@ -165,5 +165,14 @@ class ActionType
             'Description' => $this->Description,
             'Code' => $this->Code
         ];
+    }
+    public function getAll(){
+        try {
+            $results = DB::table('tbl_actiontype')->get();
+            return $results;
+        }
+        catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
