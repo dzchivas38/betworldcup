@@ -107,4 +107,6 @@ class ResultNumber
             'isDelete' => $this->isDelete
         ];
     }
+
+
 }

@@ -29,6 +29,9 @@ class HashMap
     {
         return $this->value;
     }
+    public function length(){
+        return count($this->value);
+    }
     public function has($find){
         $exists = FALSE;
         if(!is_array($this->value)){

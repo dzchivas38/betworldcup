@@ -30,7 +30,6 @@ class ResultCaculate
     {
         return $this->issueHightlightIndex;
     }
-
     /**
      * @param mixed $issueHightlightIndex
      */
@@ -86,7 +85,4 @@ class ResultCaculate
     {
         $this->data = $data;
     }
-
-
-
 }
