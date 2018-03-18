@@ -59,7 +59,14 @@
         </div>
         <div class="row">
             <div class="col-sm-12 col-xs-12">
-                <div text-angular="text-angular" name="htmlcontent" ng-model="htmlcontent" ta-disabled='disabled'></div>
+                <!--<div text-angular="text-angular" name="htmlcontent" ng-model="htmlcontent" ta-toolbar=""></div>-->
+                <text-angular name="htmlcontent" ng-model="htmlcontent"></text-angular>
+            </div>
+            <div class="col-sm-12 col-xs-12 mg-top-10">
+                <button class="btn btn-sm btn-action-create" type="button" ng-click="process()">
+                    <span>Tính toán</span>
+                    <i class="icon-action-redo"></i>
+                </button>
             </div>
             <div class="col-sm-12 col-xs-12">
                 <h2>HTML Code</h2>

@@ -23,6 +23,7 @@
             var now = moment().format('YYYY-MM-DD');
             var result = [];
             keySearch = (keySearch) ? keySearch : now;
+
             $homeSvc.getResultScheduce(keySearch).then(function (item) {
                 if(_.get(item,"length") > 0){
                     _.set($scope,"data",item[0]);
@@ -84,8 +85,21 @@
                     //to do
                 }
             });
+            $(function () {
+                $('.txtDateTime').datetimepicker({
+                    dayOfWeekStart: 1,
+                    lang: 'vi',
+                    startDate: '2014-10-10',
+                    format: 'Y-m-d',
+                    dateonly: false,
+                    showHour: false,
+                    closeOnDateSelect: true,
+                    showMinute: false,
+                    timepicker: false,
+                    onChangeDateTime: function(dp, $input) {
+                    }
+                });
+            });
         };
-
-
     }
 })();

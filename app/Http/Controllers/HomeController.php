@@ -24,9 +24,11 @@ class HomeController extends Controller
         $syn = new Syntax();
         $lists = $syn->getAll();
 
-        $a = " 33x200n. 57.75x100n.tin 5 55.77x100n.";
-        $d = explode(". ",$a);
-        dd($d);
+        $myArray = array();
+        $myArray[] = 1;
+        $myArray[] = 2;
+        $myArray[] = 3;
+        dd($myArray);
     }
 
 

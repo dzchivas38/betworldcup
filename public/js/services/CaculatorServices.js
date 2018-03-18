@@ -5,9 +5,9 @@
         .module('randomNumberApp')
         .factory('CalculatorSvc', pl);
 
-    pl.$inject = ['$http', '$q'];
+    pl.$inject = ['$http', '$q','blockUI'];
 
-    function pl($http, $q) {
+    function pl($http, $q,blockUI) {
         var service = {
             process:process,
         };
@@ -38,18 +38,22 @@
         }
         function postMethodService(restUrl,data) {
             var dfd = $q.defer();
+            blockUI.start("Đang tải ...!");
             $http.post(restUrl, data,
                 {
                     headers: {
                         "Accept": "application/json;odata=verbose",
+                        //'Content-Type': 'application/x-www-form-urlencoded'
                         "Content-Type": "application/json"
                     },
                 })
                 .then(function onSuccess(response) {
-                    dfd.resolve(_.get(response, "data.d"));
+                    blockUI.stop();
+                    dfd.resolve(_.get(response, "data"));
                 })
                 .catch(function onError(response) {
                     console.log(response);
+                    blockUI.stop();
                     dfd.resolve(null);
                 });
             return dfd.promise;

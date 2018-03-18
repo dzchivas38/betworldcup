@@ -5,7 +5,7 @@
  * Date: 11/03/2018
  * Time: 15:31
  */
-
+// Đối tượng tin nhắn truyền vào để kiểm tra và tính toán
 namespace App\Models;
 
 
@@ -93,6 +93,7 @@ class Messenger
     }
     /**
      * @return array
+     * Trả về mảng với key là cú pháp và value là đoạn string của tin nhắn
      */
     public function getArrayTobeConvertFromMsg($array)
     {

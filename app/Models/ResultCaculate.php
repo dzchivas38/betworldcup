@@ -15,6 +15,7 @@ class ResultCaculate
     private $msg;
     private $data;
     private $issueHightlightIndex;
+    private $msg_syntax_list;
 
     /**
      * ResultCaculate constructor.
@@ -23,16 +24,18 @@ class ResultCaculate
     {
     }
 
-    /**
-     * @return mixed
-     */
+    public function getMsgSyntaxList()
+    {
+        return $this->msg_syntax_list;
+    }
+    public function setMsgSyntaxList($msg_syntax_list)
+    {
+        $this->msg_syntax_list = $msg_syntax_list;
+    }
     public function getIssueHightlightIndex()
     {
         return $this->issueHightlightIndex;
     }
-    /**
-     * @param mixed $issueHightlightIndex
-     */
     public function setIssueHightlightIndex($issueHightlightIndex)
     {
         $this->issueHightlightIndex = $issueHightlightIndex;
@@ -84,5 +87,14 @@ class ResultCaculate
     public function setData($data)
     {
         $this->data = $data;
+    }
+    public function jsonSerialize() {
+        return [
+            'status' => $this->status,
+            'msg' => $this->msg,
+            'data' => $this->data,
+            'issueHightlightIndex' => $this->issueHightlightIndex,
+            'msg_syntax_list'=>$this->msg_syntax_list
+        ];
     }
 }

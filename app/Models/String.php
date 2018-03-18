@@ -8,7 +8,7 @@
 
 namespace App\Models;
 
-
+//Đối tượng chuỗi và các hàm xử lý chuỗi
 class String
 {
     private $value;
@@ -46,5 +46,7 @@ class String
         $this->set($tmp);
         return $return;
     }
-
+    public function explode($needle){
+        return $this->explode($needle,$this->value);
+    }
 }

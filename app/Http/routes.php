@@ -20,4 +20,5 @@ Route::get('/api-get-player', 'PlayerController@getAll');
 Route::get('api-get-result-resource/{pubDate}', 'HomeController@getItem');
 
 Route::get('/test', 'HomeController@test');
-Route::get('/check1', 'CalculatorController@index');
+Route::post('/api-get-calculator-process', 'CalculatorController@index');
+//Route::get('/test3', 'CalculatorController@index');

@@ -5,7 +5,7 @@
  * Date: 05/03/2018
  * Time: 23:50
  */
-
+// đối tượng mảng với cấu trúc key-value
 namespace App\Models;
 
 
@@ -32,6 +32,9 @@ class HashMap
     public function length(){
         return count($this->value);
     }
+    /**
+     * Kiểm tra chuỗi có là key của mảng
+     */
     public function has($find){
         $exists = FALSE;
         if(!is_array($this->value)){
@@ -44,6 +47,9 @@ class HashMap
         }
         return $exists;
     }
+    /**
+     * Kiểm tra chuỗi có tồn tại như là key trong mảng ko phân biệt chữ hoa chữ thường
+     */
     public function hasLike($find){
         $exists = FALSE;
         if(!is_array($this->value)){
