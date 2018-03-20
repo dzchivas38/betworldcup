@@ -21,14 +21,8 @@ class HomeController extends Controller
     public function test()
     {
         $str = "De 01.10.17.71x100n. 56.65x200n. 02.20.26.62.00x100n. de 67.76x400n. 09.90x200n. 25.52x300n. 08.80x100n. 37.73x200n. 58.85x900n. Lo 33x200n. 57.75x100n. 55.77x100n.tin 5";
-        $syn = new Syntax();
-        $lists = $syn->getAll();
-
-        $myArray = array();
-        $myArray[] = 1;
-        $myArray[] = 2;
-        $myArray[] = 3;
-        dd($myArray);
+        $unformatted_phone = "phone 122-3222223.ext 442";
+        echo preg_replace("/[^0-9]/", "", $unformatted_phone);
     }
 
 

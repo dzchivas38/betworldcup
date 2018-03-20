@@ -82,10 +82,13 @@ class CalculatorController extends Controller
     public function process(){
 
     }
+
     /**
      * Hàm kiểm tra lỗi sai trong toạn tin nhắn đã nhóm theo cú pháp
      * Ví dụ "De" => " 01.10.17.71x100n. 56.65x200n. 02.20.26.62.00x100n. "
-    */
+     * @param $syntaxChild là đoạn tin nhắn trong nhóm 1 cú pháp kiểu chơi ví dụ như đề
+     * @return array
+     */
     public function syntaxChildValidate($syntaxChild){
         $errorList = array();
         $syntaxChild = is_string($syntaxChild) ? trim($syntaxChild) : "";
@@ -93,9 +96,21 @@ class CalculatorController extends Controller
         if ($syntaxChild->length() > 0){
             $syntaxChildList = explode(" ",$syntaxChild->get());
             foreach ($syntaxChildList as $item) {
-                $d = (strpos($item, 'x') || strpos($item, 'X'));
-                if (!$d){
+                $d = (strpos($item, 'x'));
+                if(substr_count($item,"x") >=2){
                     $errorList[] = $item;
+                }else{
+                    if (!$d){
+                        $errorList[] = $item;
+                    }else{
+                        $item_clone = new String($item);
+                        $x_index = $item_clone->firstIndexOf("x");
+                        $x_sub = $item_clone->subString($x_index);
+                        $number_only = preg_replace("/[^0-9]/", "", $item_clone->get());
+                        if (strlen($number_only) >5){
+                            $errorList[] = $item;
+                        }
+                    }
                 }
             }
         }else{

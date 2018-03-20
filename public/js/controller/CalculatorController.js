@@ -8,24 +8,62 @@
         .module('randomNumberApp')
         .controller('CalculatorController', CalculatorCtrl);
 
-    CalculatorCtrl.$inject = ['$scope','CalculatorSvc','toastr','blockUI'];
+    CalculatorCtrl.$inject = ['$scope','CalculatorSvc','PlayerSvc','toastr','blockUI'];
 
-    function CalculatorCtrl($scope,$CalculatorSvc,toastr,blockUI) {
+    function CalculatorCtrl($scope,$CalculatorSvc,$playerSvc,toastr,blockUI) {
         $scope.title = 'CalculatorController';
+        $scope.playerList = [];
         var htmlCodeHeader = "<span style='color: red'>";
         var htmlCodeEnd = "</span>";
         formLoad();
         function formLoad() {
-            // $scope.htmlcontent = "<span style='color: red'>aaaa</span>"
+            $(function () {
+                $('.txtDateTime').datetimepicker({
+                    dayOfWeekStart: 1,
+                    lang: 'vi',
+                    startDate: '2014/10/10',
+                    format: 'd/m/Y',
+                    dateonly: false,
+                    showHour: false,
+                    closeOnDateSelect: true,
+                    showMinute: false,
+                    timepicker: false,
+                    onChangeDateTime: function(dp, $input) {
+                        console.log(dp);
+                        console.log($input);
+                    }
+                });
+                $scope.ngaytinh = moment().format('DD/MM/YYYY');
+                $playerSvc.getAll().then(function (items) {
+                    _.set($scope,"playerList",items);
+                    vm.msCaPlayer = $('#ms-ca-player').magicSuggest({
+                        data: $scope.playerList,
+                        resultAsString: true,
+                        expandOnFocus: true,
+                        maxDropHeight: 145,
+                        placeholder: 'Chọn khách hàng',
+                        valueField: 'Id',
+                        editable: false,
+                        displayField: 'Name',
+                        maxSelection: 1
+                    });
+                    $(vm.msCaPlayer).on('selectionchange', function () {
+                        var selection = JSON.stringify(this.getSelection());
+                        var temp = this.getSelection();
+                        console.log(selection);
+                        console.log(temp);
+                    });
+                });
+            });
         };
         var vm={};
         // truyền vào: msg,pubdate,customer
         $scope.process = function () {
             $scope.htmlcontent = deCodeHtmlContent($scope.htmlcontent);
+            validateMsg();
             $CalculatorSvc.process({msg:$scope.htmlcontent})
                 .then(function (item) {
                     console.log(item);
-                    return 0;
                 if(_.get(item,"status") === false){
                     toastr.error('Tin nhắn chưa đúng cú pháp!', 'Cảnh báo');
                     $scope.htmlcontent = endCodeHtmlContent(_.clone($scope.htmlcontent),_.get(item,"issueHightlightIndex"));
@@ -36,8 +74,13 @@
         }
         function validateMsg() {
             var htmlcontentClone = _.clone($scope.htmlcontent);
+            htmlcontentClone = htmlcontentClone.replaceAll("×","x",true);
+            htmlcontentClone = htmlcontentClone.replaceAll("X","x",true);
+            htmlcontentClone = htmlcontentClone.replaceAll("xxx","x",true);
+            htmlcontentClone = htmlcontentClone.replaceAll("xx","x",true);
             //2 dấu X liền nhau => 1 dấu x
             //Chỉ còn 1 dấu X trong 1 đoạn
+            _.set($scope,"htmlcontent",htmlcontentClone);
         }
         function endCodeHtmlContent(htmlcontent,items) {
             var htmlcontentClone = _.clone(htmlcontent);
@@ -64,37 +107,5 @@
                 str = str.toString();
             return str.replace(/<[^>]*>/g, '');
         }
-        $(function () {
-            $('.txtDateTime').datetimepicker({
-                dayOfWeekStart: 1,
-                lang: 'vi',
-                startDate: '2014/10/10',
-                format: 'd/m/Y',
-                dateonly: false,
-                showHour: false,
-                closeOnDateSelect: true,
-                showMinute: false,
-                timepicker: false,
-                onChangeDateTime: function(dp, $input) {
-                }
-            });
-            var data = [{Id:1,Name:'Dũng'},{Id:2,Name:'Khánh'}]
-            vm.msCaPlayer = $('#ms-ca-player').magicSuggest({
-                resultAsString: true,
-                maxDropHeight: 145,
-                placeholder: 'Chọn khách hàng',
-                valueField: 'Id',
-                editable: false,
-                displayField: 'Name',
-                expandOnFocus: true,
-                data: data
-            });
-            $(vm.msCaPlayer).on('selectionchange', function () {
-                var selection = JSON.stringify(this.getSelection());
-                var temp = this.getSelection();
-                console.log(selection);
-                console.log(temp);
-            });
-        });
     }
 })();
