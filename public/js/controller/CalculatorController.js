@@ -8,11 +8,12 @@
         .module('randomNumberApp')
         .controller('CalculatorController', CalculatorCtrl);
 
-    CalculatorCtrl.$inject = ['$scope','CalculatorSvc','PlayerSvc','toastr','blockUI'];
+    CalculatorCtrl.$inject = ['$scope','CalculatorSvc','PlayerSvc','SyntaxSvc','toastr','blockUI'];
 
-    function CalculatorCtrl($scope,$CalculatorSvc,$playerSvc,toastr,blockUI) {
+    function CalculatorCtrl($scope,$CalculatorSvc,$playerSvc,$syntaxSvc,toastr,blockUI) {
         $scope.title = 'CalculatorController';
         $scope.playerList = [];
+        $scope.syntaxList = [];
         var htmlCodeHeader = "<span style='color: red'>";
         var htmlCodeEnd = "</span>";
         formLoad();
@@ -45,7 +46,8 @@
                         valueField: 'Id',
                         editable: false,
                         displayField: 'Name',
-                        maxSelection: 1
+                        maxSelection: 1,
+                        required: true
                     });
                     $(vm.msCaPlayer).on('selectionchange', function () {
                         var selection = JSON.stringify(this.getSelection());
@@ -55,32 +57,64 @@
                     });
                 });
             });
+            $syntaxSvc.getAll().then(function (items) {
+               _.set($scope,"syntaxList",items);
+            });
         };
         var vm={};
         // truyền vào: msg,pubdate,customer
         $scope.process = function () {
             $scope.htmlcontent = deCodeHtmlContent($scope.htmlcontent);
-            validateMsg();
-            $CalculatorSvc.process({msg:$scope.htmlcontent})
-                .then(function (item) {
-                    console.log(item);
-                if(_.get(item,"status") === false){
-                    toastr.error('Tin nhắn chưa đúng cú pháp!', 'Cảnh báo');
-                    $scope.htmlcontent = endCodeHtmlContent(_.clone($scope.htmlcontent),_.get(item,"issueHightlightIndex"));
-                }else {
-                    toastr.success('Tin nhắn chính xác', 'Thành công');
-                }
-            })
-        }
+            var checked = validateMsg();
+            if (checked){
+                $CalculatorSvc.process({msg:$scope.htmlcontent})
+                    .then(function (item) {
+                        console.log(item);
+                        if(_.get(item,"status") === false){
+                            toastr.error('Tin nhắn chưa đúng cú pháp!', 'Cảnh báo');
+                            $scope.htmlcontent = endCodeHtmlContent(_.clone($scope.htmlcontent),_.get(item,"issueHightlightIndex"));
+                        }else {
+                            console.log("Tin nhắn đúng");
+                        }
+                    });
+            }
+        };
         function validateMsg() {
-            var htmlcontentClone = _.clone($scope.htmlcontent);
-            htmlcontentClone = htmlcontentClone.replaceAll("×","x",true);
-            htmlcontentClone = htmlcontentClone.replaceAll("X","x",true);
-            htmlcontentClone = htmlcontentClone.replaceAll("xxx","x",true);
-            htmlcontentClone = htmlcontentClone.replaceAll("xx","x",true);
-            //2 dấu X liền nhau => 1 dấu x
-            //Chỉ còn 1 dấu X trong 1 đoạn
-            _.set($scope,"htmlcontent",htmlcontentClone);
+            var htmlcontentClone = ($scope.htmlcontent) ? _.clone($scope.htmlcontent) :"";
+            if (htmlcontentClone.length >0){
+                htmlcontentClone = removeFirstChar(htmlcontentClone,$scope.syntaxList);
+                htmlcontentClone = htmlcontentClone.replaceAll("×","x",true);
+                htmlcontentClone = htmlcontentClone.replaceAll("X","x",true);
+                htmlcontentClone = htmlcontentClone.replaceAll("xxx","x",true);
+                htmlcontentClone = htmlcontentClone.replaceAll("xx","x",true);
+                //2 dấu X liền nhau => 1 dấu x
+                //Chỉ còn 1 dấu X trong 1 đoạn
+                _.set($scope,"htmlcontent",htmlcontentClone);
+                return true;
+            }else{
+                toastr.warning("Vui lòng nhập tin nhắn cần tính","Cảnh báo!");
+                return false;
+            }
+        }
+        function removeFirstChar(str,syntaxList) {
+            str = (str) ? str : "";
+            var charList = str.split(" ");
+            var temp = [];
+            for (var i=0;i<charList.length;i++){
+                var checked = _.some(syntaxList,function (item) {
+                                    return _.toLower(_.get(item,"Name")) == _.toLower(charList[i]);
+                                });
+                if (!checked){
+                    temp.push(i);
+                }else {
+                    break;
+                }
+            }
+            if (temp.length > 0){
+                _.pullAt(charList,temp);
+                toastr.warning("Những kí tự đầu tin nhắn sai cú pháp đã được remove!","Cảnh báo");
+            }
+            return _.map(charList).join(" ");
         }
         function endCodeHtmlContent(htmlcontent,items) {
             var htmlcontentClone = _.clone(htmlcontent);
@@ -101,6 +135,7 @@
         }
         function deCodeHtmlContent(str)
         {
+            str = (str) ? str :"";
             if ((str===null) || (str===''))
                 return false;
             else

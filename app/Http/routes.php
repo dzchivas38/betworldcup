@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/api-get-player', 'PlayerController@getAll');
-
+Route::get('/api-get-syntax', 'SyntaxController@getAll');
 //Route::get('/api-get-result-resource', 'HomeController@getNumberResultEveryDay');
 Route::get('api-get-result-resource/{pubDate}', 'HomeController@getItem');
 

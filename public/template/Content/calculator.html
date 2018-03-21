@@ -1,46 +1,47 @@
 <div class="body-content" ng-controller="CalculatorController">
     <div class="content-ti">
-        <div class="row">
-            <div class="col-sm-12 col-xs-12">
-                <span class="caption-subject">Tính toán kết quả</span>
-            </div>
-            <div class="col-sm-12">
-                <hr style="margin-top:0px !important;margin-bottom:10px !important;" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 col-xs-6">
-                <div class="col-sm-4 col-xs-12">
-                    <span>Chọn ngày tháng:</span>
+        <form>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <span class="caption-subject">Tính toán kết quả</span>
                 </div>
-                <div class="col-sm-6 col-xs-12">
-                    <input style="height: 30px !important;" class="form-control txtDateTime" type="text" ng-model="ngaytinh">
+                <div class="col-sm-12">
+                    <hr style="margin-top:0px !important;margin-bottom:10px !important;" />
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-xs-6">
+                    <div class="col-sm-4 col-xs-12">
+                        <span>Chọn ngày tháng:</span>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <input style="height: 30px !important;" class="form-control txtDateTime" type="text" ng-model="ngaytinh" required>
+                    </div>
 
-            </div>
-            <div class="col-sm-6 col-xs-6">
-                <div class="col-sm-4 col-xs-12">
-                    Khách hàng
                 </div>
-                <div class="col-sm-8 col-xs-12 no-padding">
-                    <div id="ms-ca-player"></div>
+                <div class="col-sm-6 col-xs-6">
+                    <div class="col-sm-4 col-xs-12">
+                        Khách hàng
+                    </div>
+                    <div class="col-sm-8 col-xs-12 no-padding">
+                        <div id="ms-ca-player"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row mg-top-10">
-            <div class="col-sm-12 col-xs-12">
-                <div class="table-responsive">
-                    <div class="table-scrollable thin">
-                        <table class="table table-advance table-bordered">
-                            <thead>
+            <div class="row mg-top-10">
+                <div class="col-sm-12 col-xs-12">
+                    <div class="table-responsive">
+                        <div class="table-scrollable thin">
+                            <table class="table table-advance table-bordered">
+                                <thead>
                                 <tr>
                                     <th>Tỉ lệ</th>
                                     <th>Càng đặc biệt(cang_db)</th>
                                     <th>Đề(de)</th>
                                     <th>Đề ba càng(bc)</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 <tr>
                                     <td>Vào/Ra <i class="fa fa-arrow-down font-green-jungle" aria-hidden="true"></i><i class="fa fa-arrow-up font-red" aria-hidden="true"></i></td>
                                     <td>
@@ -50,30 +51,31 @@
                                     <td>1/400</td>
                                 </tr>
 
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-xs-12">
-                <!--<div text-angular="text-angular" name="htmlcontent" ng-model="htmlcontent" ta-toolbar=""></div>-->
-                <text-angular name="htmlcontent" ng-model="htmlcontent"></text-angular>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <!--<div text-angular="text-angular" name="htmlcontent" ng-model="htmlcontent" ta-toolbar=""></div>-->
+                    <text-angular name="htmlcontent" ng-model="htmlcontent"></text-angular>
+                </div>
+                <div class="col-sm-12 col-xs-12 mg-top-10">
+                    <button class="btn btn-sm btn-action-create" type="submit" ng-click="process()">
+                        <span>Tính toán</span>
+                        <i class="icon-action-redo"></i>
+                    </button>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <h2>HTML Code</h2>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <textarea ng-model="htmlcontent" style="width: 100%"></textarea>
+                </div>
             </div>
-            <div class="col-sm-12 col-xs-12 mg-top-10">
-                <button class="btn btn-sm btn-action-create" type="button" ng-click="process()">
-                    <span>Tính toán</span>
-                    <i class="icon-action-redo"></i>
-                </button>
-            </div>
-            <div class="col-sm-12 col-xs-12">
-                <h2>HTML Code</h2>
-            </div>
-            <div class="col-sm-12 col-xs-12">
-                <textarea ng-model="htmlcontent" style="width: 100%"></textarea>
-            </div>
-        </div>
+        </form>
     </div>
 </div>

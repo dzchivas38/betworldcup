@@ -3,20 +3,23 @@
 
     angular
         .module('randomNumberApp')
-        .factory('CalculatorSvc', pl);
+        .factory('SyntaxSvc', pl);
 
-    pl.$inject = ['$http', '$q','blockUI'];
+    pl.$inject = ['$http', '$q'];
 
-    function pl($http, $q,blockUI) {
+    function pl($http, $q) {
         var service = {
-            process:process,
+            getById: getById,
+            getAll:getAll,
         };
 
         return service;
-        //hàm gọi API tính toán kết quả
-        function process(data) {
-            var url = 'api-get-calculator-process/';
-            return postMethodService(url,data);
+        function getAll() {
+            var url = 'api-get-syntax';
+            return getMethodService(url,null);
+        }
+        function getById(id) {
+
         }
         function getMethodService(restUrl,data) {
             var dfd = $q.defer();
@@ -38,23 +41,19 @@
         }
         function postMethodService(restUrl,data) {
             var dfd = $q.defer();
-            blockUI.start("Đang tải ...!");
             $http.post(restUrl, data,
                 {
                     headers: {
                         "Accept": "application/json;odata=verbose",
-                        //'Content-Type': 'application/x-www-form-urlencoded'
                         "Content-Type": "application/json"
                     },
                 })
                 .then(function onSuccess(response) {
-                    blockUI.stop();
-                    dfd.resolve(_.get(response, "data"));
+                    dfd.resolve(_.get(response, "data.d"));
                 })
                 .catch(function onError(response) {
                     console.log(response);
-                    blockUI.stop();
-                    dfd.resolve(false);
+                    dfd.resolve(null);
                 });
             return dfd.promise;
         }

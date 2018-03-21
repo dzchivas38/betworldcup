@@ -51,12 +51,13 @@ class HashMap
      * Kiểm tra chuỗi có tồn tại như là key trong mảng ko phân biệt chữ hoa chữ thường
      */
     public function hasLike($find){
+        $q = (string) $find;
         $exists = FALSE;
         if(!is_array($this->value)){
             return;
         }
         foreach ($this->value as $key => $value) {
-            if(strtolower($find) == strtolower($value)){
+            if(strtolower($q) == strtolower($value)){
                 $exists = TRUE;
             }
         }

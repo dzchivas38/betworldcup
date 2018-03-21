@@ -45,6 +45,7 @@
         <script type="text/javascript" src="{!! url('js/services/PlayerService.js') !!}"></script>
         <script type="text/javascript" src="{!! url('js/services/HomeService.js') !!}"></script>
         <script type="text/javascript" src="{!! url('js/services/CaculatorServices.js') !!}"></script>
+        <script type="text/javascript" src="{!! url('js/services/SyntaxServices.js') !!}"></script>
         {{--------------------------ENDSERVICES---------------------------}}
          <!--------------------------CONTROLLER-------------------------- -->
 

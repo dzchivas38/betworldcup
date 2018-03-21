@@ -51,7 +51,7 @@ class Messenger
         } else {
             $clone_msg = new String($str);
             $first = $clone_msg->firstIndexOf(' ');
-            $strCheck = $clone_msg->subString($first); // String cắt A ; string còn lại B là str1->get
+            $strCheck = (string) $clone_msg->subString($first); // String cắt A ; string còn lại B là str1->get
             $checked = $map->hasLike($strCheck);
             //Nếu đoạn string sau space đầu tiên có trong mảng cú pháp
             if ($checked) {//A thuộc mảng cú pháp
