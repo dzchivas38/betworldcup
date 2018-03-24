@@ -21,4 +21,8 @@ Route::get('api-get-result-resource/{pubDate}', 'HomeController@getItem');
 
 Route::get('/test', 'HomeController@test');
 Route::post('/api-get-calculator-process', 'CalculatorController@index');
-//Route::get('/test3', 'CalculatorController@index');
+
+
+
+
+Route::get('test3', 'CalculatorController@process');

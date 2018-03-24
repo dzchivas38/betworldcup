@@ -19,18 +19,16 @@ class CalculatorController extends Controller
     private $msg_syntax_list = array();
     /**
      * Display a listing of the resource.
-     * @param $strMsg: đoạn tin nhắn cần tính toán
-     * @param $pubDate: ngày thực hiện tính toán
-     * @param $customer: Với mỗi khách hàng có 1 tỉ lệ tính toán khác nhau
+     * @param $rq
      * @return \Illuminate\Http\Response
      */
     //public function index($strMsg, $pubDate, $customer)
     public function index(Request $rq)
     {
         $strMsg = $rq->input('msg');
-
+        $dt_pub_date = $rq->input('pubDate');
+        $player = $rq->input('player');
         //-------------------------------
-        //$strMsg= "De 01.10.17.71x100n. 56.65200n. 02.20.26.62.00x100n. de 67.76400n. 09.90x200n. 25.52x300n. 08.80x100n. 37.73x200n. 58.85x900n. Lo 33x200n. 57.75x100n.tin 5 55.77x100n.";
         $syntax = new Syntax();
         $result = new ResultCaculate();
         $syntaxList = $syntax->getAll();
@@ -50,8 +48,9 @@ class CalculatorController extends Controller
             $result->setIssueHightlightIndex($syntaxIssueList);
             $result->setStatus(true);
             $result->setMsg("Cú pháp tin nhắn chính xác !");
-            $result->setData(null);
             $result->setMsgSyntaxList($this->msg_syntax_list);
+            $data = $this->process($strMsg,$dt_pub_date,$player,$listName);
+            $result->setData($data);
         }
         return $result->jsonSerialize();
     }
@@ -79,8 +78,16 @@ class CalculatorController extends Controller
      * Hàm tính toán khi chuỗi nhập vào là đúng cú pháp
      * trả về mảng string có cú pháp ko có kí tự X hoặc x
      */
-    public function process(){
-
+    public function process($strMsg,$dt_pub_date,$player,$syntaxList){
+        $msg = new Messenger($strMsg);
+        $msgWithSyntax = $msg->getArrayTobeConvertFromMsg($syntaxList);
+        //lay ket qua soxo theo ngay post len
+        try {
+            $results = DB::table('tbl_result_number')->whereDate('PubDate', '=', $dt_pub_date)->get();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        return $player;
     }
 
     /**

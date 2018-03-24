@@ -14,6 +14,11 @@
         $scope.title = 'CalculatorController';
         $scope.playerList = [];
         $scope.syntaxList = [];
+        $scope.request = {
+            msg:"",
+            pubDate:"",
+            player:{}
+        };
         var htmlCodeHeader = "<span style='color: red'>";
         var htmlCodeEnd = "</span>";
         formLoad();
@@ -30,30 +35,28 @@
                     showMinute: false,
                     timepicker: false,
                     onChangeDateTime: function(dp, $input) {
-                        console.log(dp);
-                        console.log($input);
+                        _.set($scope,"request.pubDate",moment(dp).format('YYYY-MM-DD'));
+                        _.set($scope,"pubDate",moment(dp).format('DD/MM/YYYY'));
+                        console.log($scope.request.pubDate);
                     }
                 });
-                $scope.ngaytinh = moment().format('DD/MM/YYYY');
+                $scope.request.pubDate = moment().format('YYYY-MM-DD');
+                $scope.pubDate = moment().format('DD/MM/YYYY');
                 $playerSvc.getAll().then(function (items) {
                     _.set($scope,"playerList",items);
                     vm.msCaPlayer = $('#ms-ca-player').magicSuggest({
                         data: $scope.playerList,
-                        resultAsString: true,
                         expandOnFocus: true,
                         maxDropHeight: 145,
                         placeholder: 'Chọn khách hàng',
                         valueField: 'Id',
                         editable: false,
                         displayField: 'Name',
-                        maxSelection: 1,
-                        required: true
+                        maxSelection: 1
                     });
                     $(vm.msCaPlayer).on('selectionchange', function () {
-                        var selection = JSON.stringify(this.getSelection());
                         var temp = this.getSelection();
-                        console.log(selection);
-                        console.log(temp);
+                        _.set($scope,"request.player",_.clone(temp[0]));
                     });
                 });
             });
@@ -64,10 +67,16 @@
         var vm={};
         // truyền vào: msg,pubdate,customer
         $scope.process = function () {
+            if (!_.get($scope,"request.player.Id")){
+                toastr.warning("Vui lòng nhập khách hàng !","Cảnh báo");
+                return;
+            }
             $scope.htmlcontent = deCodeHtmlContent($scope.htmlcontent);
+            _.set($scope,"request.msg",_.clone($scope.htmlcontent));
+            console.log($scope.request);
             var checked = validateMsg();
             if (checked){
-                $CalculatorSvc.process({msg:$scope.htmlcontent})
+                $CalculatorSvc.process($scope.request)
                     .then(function (item) {
                         console.log(item);
                         if(_.get(item,"status") === false){

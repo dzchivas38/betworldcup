@@ -43,7 +43,6 @@
                 {
                     headers: {
                         "Accept": "application/json;odata=verbose",
-                        //'Content-Type': 'application/x-www-form-urlencoded'
                         "Content-Type": "application/json"
                     },
                 })
@@ -54,7 +53,7 @@
                 .catch(function onError(response) {
                     console.log(response);
                     blockUI.stop();
-                    dfd.resolve(false);
+                    dfd.resolve(response);
                 });
             return dfd.promise;
         }
