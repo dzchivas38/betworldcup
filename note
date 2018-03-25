@@ -6,3 +6,6 @@ php artisan make:console DemoCron --command=demo:cron
 composer update --no-scripts
 
 php artisan serve --port=8080
+
+
+PHP : foreach (Array as $key=>$value) : ra cặp key và value

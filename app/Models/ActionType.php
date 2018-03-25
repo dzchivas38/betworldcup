@@ -14,11 +14,10 @@ class ActionType
     private $Id;
     private $Name;
     private $ActionTypeLevel;
-    private $InCoin;
-    private $OutCoin;
     private $IsFirstChirld;
     private $Description;
     private $Code;
+    private $Unit;
 
     /**
      * ActionType constructor.
@@ -74,39 +73,6 @@ class ActionType
     {
         $this->ActionTypeLevel = $ActionTypeLevel;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getInCoin()
-    {
-        return $this->InCoin;
-    }
-
-    /**
-     * @param mixed $InCoin
-     */
-    public function setInCoin($InCoin)
-    {
-        $this->InCoin = $InCoin;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOutCoin()
-    {
-        return $this->OutCoin;
-    }
-
-    /**
-     * @param mixed $OutCoin
-     */
-    public function setOutCoin($OutCoin)
-    {
-        $this->OutCoin = $OutCoin;
-    }
-
     /**
      * @return mixed
      */
@@ -154,16 +120,32 @@ class ActionType
     {
         $this->Code = $Code;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUnit()
+    {
+        return $this->Unit;
+    }
+
+    /**
+     * @param mixed $Unit
+     */
+    public function setUnit($Unit)
+    {
+        $this->Unit = $Unit;
+    }
+
     public function jsonSerialize() {
         return [
             'Id' => $this->Id,
             'Name' => $this->Name,
             'ActionTypeLevel' => $this->ActionTypeLevel,
-            'InCoin' => $this->InCoin,
-            'OutCoin' => $this->OutCoin,
             'IsFirstChirld' => $this->IsFirstChirld,
             'Description' => $this->Description,
-            'Code' => $this->Code
+            'Code' => $this->Code,
+            'Unit' => $this->Unit
         ];
     }
     public function getAll(){

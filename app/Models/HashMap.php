@@ -63,4 +63,11 @@ class HashMap
         }
         return $exists;
     }
+    public function findByKey($f,$param){
+        foreach ($this->value as $key => $value){
+            if ($f == $value->$param){
+                return array($key=>$value);
+            }
+        }
+    }
 }

@@ -83,11 +83,22 @@ class CalculatorController extends Controller
         $msgWithSyntax = $msg->getArrayTobeConvertFromMsg($syntaxList);
         //lay ket qua soxo theo ngay post len
         try {
-            $results = DB::table('tbl_result_number')->whereDate('PubDate', '=', $dt_pub_date)->get();
+            $results = DB::table('tbl_result_number')->whereDate('PubDate', '=', $dt_pub_date)->first();
+            $xs_live = preg_split('/\r\n|\r|\n/', $results->Description);
+            array_shift($xs_live);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-        return $player;
+        try{
+            $player_join_cash_out = DB::table('tbl_player')
+                ->join('tbl_cashout', 'tbl_player.Id', '=', 'tbl_cashout.PlayerId')
+                ->join('tbl_actiontype', 'tbl_cashout.ActionTypeId', '=', 'tbl_actiontype.Id')
+                ->select('tbl_player.Id', 'tbl_player.Name', 'tbl_cashout.InCoin','tbl_cashout.OutCoin','tbl_actiontype.Name','tbl_actiontype.ActionTypeLevel','tbl_actiontype.Code','tbl_actiontype.Unit')
+                ->where('tbl_player.Id', '=', $player['Id'])
+                ->get();
+        }catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

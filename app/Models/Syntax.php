@@ -15,6 +15,7 @@ class Syntax
     private $Name;
     private $ActionTypeId;
     private $Description;
+    private $SyntaxForm;
 
     /**
      * Syntax constructor.
@@ -86,17 +87,44 @@ class Syntax
     {
         $this->Description = $Description;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSyntaxForm()
+    {
+        return $this->SyntaxForm;
+    }
+
+    /**
+     * @param mixed $SyntaxForm
+     */
+    public function setSyntaxForm($SyntaxForm)
+    {
+        $this->SyntaxForm = $SyntaxForm;
+    }
+
     public function jsonSerialize() {
         return [
             'Id' => $this->Id,
             'Name' => $this->Name,
             'ActionTypeId' => $this->ActionTypeId,
-            'Description' => $this->Description
+            'Description' => $this->Description,
+            'SyntaxForm' => $this->SyntaxForm
         ];
     }
     public function getAll(){
         try {
             $results = DB::table('tbl_syntax')->get();
+            return $results;
+        }
+        catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function getConstSyn($str){
+        try {
+            $results = DB::table('tbl_syntax')->where('Name','=',$str)->first();
             return $results;
         }
         catch (\Exception $e) {
