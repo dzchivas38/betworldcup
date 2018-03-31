@@ -25,4 +25,4 @@ Route::post('/api-get-calculator-process', 'CalculatorController@index');
 
 
 
-Route::get('test3', 'CalculatorController@process');
+Route::get('test3', 'HomeController@test3');

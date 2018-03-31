@@ -34,6 +34,9 @@ class String
     public function length(){
         return strlen($this->value);
     }
+    public function trimS(){
+        $this->value = trim($this->value);
+    }
     public function getIndexOf($needle,$offset){
         return strpos($this->value, $needle,intval($offset));
     }
@@ -47,6 +50,6 @@ class String
         return $return;
     }
     public function explode($needle){
-        return $this->explode($needle,$this->value);
+        return explode($needle,$this->value);
     }
 }
