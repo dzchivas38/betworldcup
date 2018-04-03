@@ -145,6 +145,7 @@
         function deCodeHtmlContent(str)
         {
             str = (str) ? str :"";
+            str = str.replaceAll("<br/>",' ',true);
             if ((str===null) || (str===''))
                 return false;
             else

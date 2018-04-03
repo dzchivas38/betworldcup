@@ -23,7 +23,8 @@ class HomeController extends Controller
     }
     public function test()
     {
-        $str = "De 01.45.91.17.71x100n. 56.65x200n. 02.20.26.62.00x100n. de 67.76x400n. 09.90x200n. 25.52x300n. 08.80x100n. 37.73x200n. 58.85x900n. Lo 33x200n. 57.75x100n";
+        $str = "xien2 04.82x10 xien3 10.55.74x20xxádasdxxx lo 10x30xxxx";
+        //$str = "De 01.45.91.17.71x100n. 56.65x200n. 02.20.26.62.00x100n. de 67.76x400n. 09.90x200n. 25.52x300n. 08.80x100n. 37.73x200n. 58.85x900n. Lo 33x200n. 57.75x100n";
         $msg = new Messenger($str);
         $syntax = new Syntax();
         $syntaxList = $syntax->getAll();
@@ -32,7 +33,7 @@ class HomeController extends Controller
         }, $syntaxList);
         $msgWithSyntax = $msg->getArrayTobeConvertFromMsg($listName);
         try {
-            $results = DB::table('tbl_result_number')->whereDate('PubDate', '=', '2018-03-31')->first();
+            $results = DB::table('tbl_result_number')->whereDate('PubDate', '=', '2018-04-02')->first();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -43,7 +44,7 @@ class HomeController extends Controller
         $player_join_cash_out = DB::table('tbl_player')
             ->join('tbl_cashout', 'tbl_player.Id', '=', 'tbl_cashout.PlayerId')
             ->join('tbl_actiontype', 'tbl_cashout.ActionTypeId', '=', 'tbl_actiontype.Id')
-            ->select('tbl_player.Id', 'tbl_player.Name', 'tbl_cashout.InCoin','tbl_cashout.OutCoin','tbl_actiontype.Name','tbl_actiontype.ActionTypeLevel','tbl_actiontype.Code','tbl_actiontype.Unit')
+            ->select('tbl_player.Id', 'tbl_player.Name', 'tbl_cashout.InCoin','tbl_cashout.OutCoin','tbl_actiontype.Name','tbl_actiontype.ActionTypeLevel','tbl_actiontype.Code','tbl_actiontype.Unit','tbl_actiontype.IsFirstChirld')
             ->where('tbl_player.Id', '=', 7)
             ->get();
         //dd($player_join_cash_out);
@@ -74,7 +75,7 @@ class HomeController extends Controller
             $vm_result = $this->parserMsg($value,$cus_cash_out,$kq_list);
             $vm_result_list = array_merge($vm_result_list,$vm_result);
         }
-        return $vm_result_list;
+        dd($vm_result_list);
     }
     //hàm tính đoạn tin nhắn con trả mảng kết quả.
     public function parserMsg($tin_nhan,$cash_out,$ket_qua_so_xo){
@@ -94,14 +95,45 @@ class HomeController extends Controller
                 $char_list_money = str_split($str->get());
                 $n = $this->getFirstIndexOfNumber($char_list_money);
                 $c = $this->getFirstIndexOfChar($char_list_money,$n);
+                if ($c === null){
+                    $c = $str->length();
+                }
                 $vali = substr($str->get(),$n,$c-$n);//giá trị của các số dánh
-                $sum = count($num_list); //đếm số đánh qua dấu . nên + 1 do ko có dấu . cuối
-                $sum = $sum*$vali*($cash_out->InCoin);
-                // Đoạn so kết quả với từng loại chơi check ở đây
-                if ($cash_out->Code =="de"){
-                    $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,false,0);
+                //check có phải là lô xiên hay ko
+                if ($cash_out->IsFirstChirld == 1 && $cash_out->ActionTypeLevel > 1){
+                    $sum = $vali*($cash_out->InCoin);
                 }else{
-                    $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,true,0);
+                    $sum = count($num_list); //đếm số đánh qua dấu . nên + 1 do ko có dấu . cuối
+                    $sum = $sum*$vali*($cash_out->InCoin);
+                }
+                // Đoạn so kết quả với từng loại chơi check ở đây
+                if ($cash_out->IsFirstChirld == 0){//bằng 0 tức là đề
+                    switch ($cash_out->ActionTypeLevel)
+                    {
+                        case 0 :
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,false,0,0);
+                            break;
+                        default:
+                            echo "Không tìm thấy";
+                            break;
+                    }
+
+                }else{ //lô
+                    switch ($cash_out->ActionTypeLevel)
+                    {
+                        case 1 : // lô thường
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,true,null,0);
+                            break;
+                        case 2 : // xiên 2
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,true,null,2);
+                            break;
+                        case 3 : // xiên 2
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,true,null,3);
+                            break;
+                        default:
+                            echo "Không tìm thấy";
+                            break;
+                    }
                 }
 
                 $bingo_count = count($bingo_list);
@@ -117,18 +149,14 @@ class HomeController extends Controller
                 $obj_result_vm->setKqCc($kq_cc);
                 $obj_result_vm->setActionType($cash_out->Code);
                 $obj_result_vm->setSoDanh($num_list);
-                $return_list[] = $obj_result_vm;
+                $return_list[] = $obj_result_vm->jsonSerialize();
             }
         }
         return $return_list;
     }
-    //Hàm tính giá trị trúng từ kết quả xổ số
-    public function getReturnValue(){
-
-    }
     //hàm tìm số trong mảng kết quả dạng arr(arr) trả về mảng những số có trong danh sách
     //r_list là mảng kết quả xổ số đã gia công
-    private function getResultFormRList($num_list,$r_list,$offset,$check_all,$vi_tri_check){
+    private function getResultFormRList($num_list,$r_list,$offset,$check_all,$vi_tri_check,$xien_may){
         $re_list = array();
         if ($check_all){
             foreach ($num_list as $num){
@@ -168,6 +196,16 @@ class HomeController extends Controller
                         $re_list[] = $num;
                     }
                 }
+            }
+            if ($xien_may > 0){
+                if (count($re_list) >= $xien_may){
+                    return $re_list;
+                }else{
+                    $n = array();
+                    return $n;
+                }
+            }else{
+                return $re_list;
             }
         }
         return $re_list;
