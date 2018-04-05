@@ -14,11 +14,15 @@
         $scope.title = 'CalculatorController';
         $scope.playerList = [];
         $scope.syntaxList = [];
+        $scope.kqListItem = [];
+        $scope.kqListItemDetail = [];
+        $scope.htmlcontent = "";
         $scope.request = {
             msg:"",
             pubDate:"",
             player:{}
         };
+        $scope.cashOutByPlayerId = [];
         var htmlCodeHeader = "<span style='color: red'>";
         var htmlCodeEnd = "</span>";
         formLoad();
@@ -57,6 +61,9 @@
                     $(vm.msCaPlayer).on('selectionchange', function () {
                         var temp = this.getSelection();
                         _.set($scope,"request.player",_.clone(temp[0]));
+                        $playerSvc.getCashOutByPlayerId(_.get($scope,"request.player.Id")).then(function (item) {
+                            _.set($scope,"cashOutByPlayerId",item);
+                        });
                     });
                 });
             });
@@ -73,17 +80,40 @@
             }
             $scope.htmlcontent = deCodeHtmlContent($scope.htmlcontent);
             _.set($scope,"request.msg",_.clone($scope.htmlcontent));
-            console.log($scope.request);
             var checked = validateMsg();
             if (checked){
                 $CalculatorSvc.process($scope.request)
                     .then(function (item) {
-                        console.log(item);
                         if(_.get(item,"status") === false){
                             toastr.error('Tin nhắn chưa đúng cú pháp!', 'Cảnh báo');
-                            $scope.htmlcontent = endCodeHtmlContent(_.clone($scope.htmlcontent),_.get(item,"issueHightlightIndex"));
+                            $scope.htmlcontent = endCodeHtmlContent($scope.htmlcontent,_.get(item,"issueHightlightIndex"));
                         }else {
-                            console.log("Tin nhắn đúng");
+                            var groupByActionType = _.groupBy(item.data,function (obj) {
+                                return obj.action_type;
+                            });
+                            groupByActionType = _.mapValues(groupByActionType,function (obj) {
+                               var kq = _.sumBy(obj,function (o) {
+                                   return o.kq_cc;
+                               });
+                                obj.kq = kq;
+                               var sum = _.sumBy(obj,function (o) {
+                                  return o.sum;
+                               });
+                                obj.sum = sum;
+                                var bingo = _.sumBy(obj,function (o) {
+                                    return o.bingo;
+                                });
+                                obj.bingo = bingo;
+                               return obj;
+                            });
+                            var toArr = _.toArray(groupByActionType);
+                            var kqcc = _.sumBy(toArr,function(o){return o.kq});
+                            var pushItem = {
+                                player: _.get($scope,"request.player"),
+                                kqcc : kqcc
+                            }
+                            $scope.kqListItem.push(pushItem);
+                            $scope.kqListItemDetail.push(groupByActionType);
                         }
                     });
             }
@@ -91,7 +121,8 @@
         function validateMsg() {
             var htmlcontentClone = ($scope.htmlcontent) ? _.clone($scope.htmlcontent) :"";
             if (htmlcontentClone.length >0){
-                htmlcontentClone = removeFirstChar(htmlcontentClone,$scope.syntaxList);
+                htmlcontentClone = highLightError(htmlcontentClone,$scope.syntaxList);
+                //htmlcontentClone = removeFirstChar(htmlcontentClone,$scope.syntaxList);
                 htmlcontentClone = htmlcontentClone.replaceAll("×","x",true);
                 htmlcontentClone = htmlcontentClone.replaceAll("X","x",true);
                 htmlcontentClone = htmlcontentClone.replaceAll("xxx","x",true);
@@ -104,6 +135,42 @@
                 toastr.warning("Vui lòng nhập tin nhắn cần tính","Cảnh báo!");
                 return false;
             }
+        }
+        function highLightError(str,syntaxList) {
+            var htmlCodeHeader = "<span style='color: red'>";
+            var htmlCodeEnd = "</span>";
+            str = (str) ? str : "";
+            var charList = str.split(" ");
+            var temp = [];
+            for (var i=0;i<charList.length;i++){
+                var checked = _.some(syntaxList,function (item) {
+                    return _.toLower(_.get(item,"Name")) == _.toLower(charList[i]);
+                });
+                if (!checked){
+                    temp.push(i);
+                }else {
+                    break;
+                }
+            }
+            var  maplist = [];
+            if (temp.length > 0){
+                var len = temp.length;
+                maplist = _.map(charList,function (item,value) {
+                   if (value === 0){
+                       return htmlCodeHeader + item;
+                   }else {
+                       if (value == temp[len - 1]){
+                           return (item + htmlCodeEnd);
+                       }else {
+                           return item
+                       }
+                   }
+                });
+                return _.map(maplist).join(" ");
+            }else {
+                return str;
+            }
+
         }
         function removeFirstChar(str,syntaxList) {
             str = (str) ? str : "";

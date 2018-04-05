@@ -36,19 +36,16 @@
                                 <thead>
                                 <tr>
                                     <th>Tỉ lệ</th>
-                                    <th>Càng đặc biệt(cang_db)</th>
-                                    <th>Đề(de)</th>
-                                    <th>Đề ba càng(bc)</th>
+                                    <th style="max-width: 20px;" ng-repeat="item in cashOutByPlayerId">{{item.Name}} ({{item.Code}})</th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td>Vào/Ra <i class="fa fa-arrow-down font-green-jungle" aria-hidden="true"></i><i class="fa fa-arrow-up font-red" aria-hidden="true"></i></td>
-                                    <td>
-                                        <label class="font-green-jungle">1</label> / <label class="font-red">70</label>
+                                    <td ng-repeat="item in cashOutByPlayerId">
+                                        <label class="font-green-jungle">{{item.InCoin}}</label> / <label class="font-red">{{item.OutCoin}}</label>
                                     </td>
-                                    <td>0.72/70</td>
-                                    <td>1/400</td>
                                 </tr>
 
                                 </tbody>
@@ -68,6 +65,38 @@
                         <span>Tính toán</span>
                         <i class="icon-action-redo"></i>
                     </button>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <h2>Kết quả</h2>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="table-responsive">
+                        <div class="table-scrollable thin">
+                            <table class="table table-advance">
+                                <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Khách hàng</th>
+                                    <th>Kết quả</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="item in kqListItem">
+                                    <td>{{$index}}</td>
+                                    <td>{{item.player.Name}}</td>
+                                    <td>{{item.kqcc}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-green" type="button">
+                                            <span>Chi tiết</span>
+                                            <i class="icon-info" style="color: royalblue"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-12 col-xs-12">
                     <h2>HTML Code</h2>

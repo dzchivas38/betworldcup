@@ -22,7 +22,7 @@ Route::get('api-get-result-resource/{pubDate}', 'HomeController@getItem');
 Route::get('/test', 'HomeController@test');
 Route::post('/api-get-calculator-process', 'CalculatorController@index');
 
-
+Route::get('api-get-cash-out-by-pid/{playerId}', 'PlayerController@getCashOutByPlayerId');
 
 
 Route::get('test3', 'HomeController@test3');

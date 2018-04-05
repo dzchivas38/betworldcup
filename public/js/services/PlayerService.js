@@ -14,12 +14,17 @@
         var service = {
             getById: getById,
             getAll:getAll,
-            createPlayer:createPlayer
+            createPlayer:createPlayer,
+            getCashOutByPlayerId:getCashOutByPlayerId
         };
 
         return service;
         function getAll() {
             var url = 'api-get-player';
+            return getMethodService(url,null);
+        }
+        function getCashOutByPlayerId(playerId) {
+            var url = 'api-get-cash-out-by-pid/' + playerId;
             return getMethodService(url,null);
         }
         function getById(id) {
