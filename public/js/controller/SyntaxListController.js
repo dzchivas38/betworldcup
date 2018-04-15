@@ -11,13 +11,17 @@
         .module('randomNumberApp')
         .controller('SyntaxListController', SyntaxListController);
 
-    SyntaxListController.$inject = ['$scope'];
+    SyntaxListController.$inject = ['$scope','SyntaxSvc'];
 
-    function SyntaxListController($scope) {
+    function SyntaxListController($scope,$SyntaxSvc) {
         $scope.title = 'SyntaxListController';
+        $scope.syntaxList = [];
         formLoad();
         function formLoad() {
-
+            $SyntaxSvc.getAll().then(function (items) {
+               console.log(items);
+               _.set($scope,"syntaxList",items);
+            });
         };
     }
 })();

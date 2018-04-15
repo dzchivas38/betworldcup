@@ -23,17 +23,17 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Cú pháp</th>
-                                <th>Tên loại chơi</th>
+                                <th>Cú pháp chuẩn</th>
                                 <th>Mô tả</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                            <tr ng-repeat="item in syntaxList">
                                 <td>{{$index}}</td>
-                                <td>|cang_g1#</td>
-                                <td>Càng giải nhất</td>
-                                <td></td>
+                                <td>{{item.Name}}</td>
+                                <td>{{item.SyntaxForm}}</td>
+                                <td>{{item.Description}}</td>
                                 <td>
                                     <button class="btn btn-sm" type="button">
                                         <i class="icon-note" style="color: royalblue"></i>
