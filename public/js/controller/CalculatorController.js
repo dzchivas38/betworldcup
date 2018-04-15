@@ -23,7 +23,7 @@
             player:{}
         };
         $scope.cashOutByPlayerId = [];
-        var htmlCodeHeader = "<span style='color: red'>";
+        var htmlCodeHeader = "<span style='color: red;text-decoration: line-through;'>";
         var htmlCodeEnd = "</span>";
         formLoad();
         function formLoad() {
@@ -85,11 +85,15 @@
                 $CalculatorSvc.process($scope.request)
                     .then(function (item) {
                         if(_.get(item,"status") === false){
-                            toastr.error('Tin nhắn chưa đúng cú pháp!', 'Cảnh báo');
+                            if (item.msg){
+                                toastr.error(item.msg, 'Cảnh báo');
+                            }else {
+                                toastr.error('Tin nhắn chưa đúng cú pháp!', 'Cảnh báo');
+                            }
                             $scope.htmlcontent = endCodeHtmlContent($scope.htmlcontent,_.get(item,"issueHightlightIndex"));
                         }else {
                             var groupByActionType = _.groupBy(item.data,function (obj) {
-                                return obj.action_type;
+                                return _.get(obj,"action_type");
                             });
                             groupByActionType = _.mapValues(groupByActionType,function (obj) {
                                var kq = _.sumBy(obj,function (o) {
@@ -121,6 +125,7 @@
         function validateMsg() {
             var htmlcontentClone = ($scope.htmlcontent) ? _.clone($scope.htmlcontent) :"";
             if (htmlcontentClone.length >0){
+                htmlcontentClone = verifyMsg(htmlcontentClone,$scope.syntaxList);
                 htmlcontentClone = highLightError(htmlcontentClone,$scope.syntaxList);
                 //htmlcontentClone = removeFirstChar(htmlcontentClone,$scope.syntaxList);
                 htmlcontentClone = htmlcontentClone.replaceAll("×","x",true);
@@ -136,8 +141,37 @@
                 return false;
             }
         }
+        function verifyMsg(str,syntaxList) {
+            str = (str) ? str : "";
+            if (str.length >0){
+                var arrReplace = [];
+                var charList = str.split(" ");
+                var mapList = _.map(charList,function (item) {
+                   var _re = item.split(".");
+                   return _re;
+                });
+                for (var i=0;i<mapList.length;i++){
+                    _.forEach(mapList[i],function (item) {
+                        var checked = _.some(syntaxList,function (obj) {
+                            return _.toLower(_.get(obj,"Name")) == _.toLower(item);
+                        });
+                        if (checked){
+                            arrReplace.push(item);
+                        }
+                    });
+                }
+                if (arrReplace.length > 0){
+                    _.forEach(arrReplace,function (item) {
+                        var strOld = "."+item;
+                        var strNew = " "+item;
+                       str = str.replaceAll(strOld,strNew,true);
+                    });
+                }
+            }
+            return str;
+        }
         function highLightError(str,syntaxList) {
-            var htmlCodeHeader = "<span style='color: red'>";
+            var htmlCodeHeader = "<span style='color: red;text-decoration: line-through;'>";
             var htmlCodeEnd = "</span>";
             str = (str) ? str : "";
             var charList = str.split(" ");
@@ -156,9 +190,12 @@
             if (temp.length > 0){
                 var len = temp.length;
                 maplist = _.map(charList,function (item,value) {
-                   if (value === 0){
-                       return htmlCodeHeader + item;
+                   if (value === 0 && temp[0] === 0){
+                       return htmlCodeHeader + item + htmlCodeEnd;
                    }else {
+                       if (value === 0){
+                           return htmlCodeHeader + item;
+                       }
                        if (value == temp[len - 1]){
                            return (item + htmlCodeEnd);
                        }else {
@@ -213,6 +250,7 @@
         {
             str = (str) ? str :"";
             str = str.replaceAll("<br/>",' ',true);
+            str = str.replaceAll("</p>",' ',true);
             if ((str===null) || (str===''))
                 return false;
             else

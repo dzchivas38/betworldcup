@@ -24,7 +24,8 @@
                 {
                     headers: {
                         "Accept": "application/json;odata=verbose",
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                 })
                 .then(function onSuccess(response) {
@@ -43,7 +44,8 @@
                 {
                     headers: {
                         "Accept": "application/json;odata=verbose",
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+
                     },
                 })
                 .then(function onSuccess(response) {

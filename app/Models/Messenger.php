@@ -49,7 +49,7 @@ class Messenger
         if (strlen($str) == 0) {
             return 0;
         } else {
-            $clone_msg = new String($str);
+            $clone_msg = new MyString($str);
             $first = $clone_msg->firstIndexOf(' ');
             $strCheck = (string) $clone_msg->subString($first); // String cắt A ; string còn lại B là str1->get
             $checked = $map->hasLike($strCheck);
@@ -66,11 +66,11 @@ class Messenger
                         next($this->arrTemp);
                     }
                     //Tim indexA trong tail
-                    $indexACheck = new String($tail);
+                    $indexACheck = new MyString($tail);
                     $offsetIndexA = $indexACheck->firstIndexOf($strCheck);
                     $newValue = $indexACheck->subString($offsetIndexA);
                     $this->mang_tach_chuoi = array_merge($this->mang_tach_chuoi,array($this->key=>$newValue));
-                    $subSyntax = new String($indexACheck->get());
+                    $subSyntax = new MyString($indexACheck->get());
                     $subSyntax->subString(strlen($strCheck));
                     $this->mang_tach_chuoi = array_merge($this->mang_tach_chuoi,array($strCheck=>$subSyntax->get()));
                     $this->convertMsgToArrayWithSyntax($subSyntax->get());

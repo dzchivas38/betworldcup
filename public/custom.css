@@ -268,3 +268,7 @@
 .ta-toolbar.focussed{
     display: none;
 }
+
+div.ms-res-ctn.dropdown-menu{
+    position: relative;
+}

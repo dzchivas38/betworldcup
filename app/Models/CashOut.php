@@ -16,6 +16,8 @@ class CashOut
     private $ActionTypeId;
     private $Ratio;
     private $Description;
+    private $InCoin;
+    private $OutCoin;
 
     /**
      * @return mixed
@@ -98,6 +100,38 @@ class CashOut
     }
 
     /**
+     * @return mixed
+     */
+    public function getInCoin()
+    {
+        return $this->InCoin;
+    }
+
+    /**
+     * @param mixed $InCoin
+     */
+    public function setInCoin($InCoin)
+    {
+        $this->InCoin = $InCoin;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOutCoin()
+    {
+        return $this->OutCoin;
+    }
+
+    /**
+     * @param mixed $OutCoin
+     */
+    public function setOutCoin($OutCoin)
+    {
+        $this->OutCoin = $OutCoin;
+    }
+
+    /**
      * CashOut constructor.
      */
     public function __construct()
@@ -109,7 +143,9 @@ class CashOut
             'PlayerId' => $this->PlayerId,
             'ActionTypeId' => $this->ActionTypeId,
             'Ratio' => $this->Ratio,
-            'Description' => $this->Description
+            'Description' => $this->Description,
+            'OutCoin' => $this->OutCoin,
+            'InCoin' => $this->InCoin
         ];
     }
 }

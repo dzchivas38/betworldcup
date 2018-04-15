@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\ActionType;
 use App\Models\Messenger;
+use App\Models\MyString;
 use App\Models\ResultCaculate;
 use App\Models\ResultViewModel;
-use App\Models\String;
 use App\Models\Syntax;
 use Illuminate\Http\Request;
 use Illuminate\Support\collection;
@@ -47,12 +47,20 @@ class CalculatorController extends Controller
             $result->setMsgSyntaxList($this->msg_syntax_list);
         }else{
             //Tin nhắn sử dụng để tính toán đúng cú pháp
-            $result->setIssueHightlightIndex($syntaxIssueList);
-            $result->setStatus(true);
-            $result->setMsg("Cú pháp tin nhắn chính xác !");
-            $result->setMsgSyntaxList($this->msg_syntax_list);
             $data = $this->process($strMsg,$dt_pub_date,$player,$listName);
-            $result->setData($data);
+            if ($data == false){
+                $result->setStatus(false);
+                $result->setIssueHightlightIndex($syntaxIssueList);
+                $result->setMsg("Không có kết quả");
+                $result->setMsgSyntaxList($this->msg_syntax_list);
+                $result->setData(0);
+            }else{
+                $result->setIssueHightlightIndex($syntaxIssueList);
+                $result->setStatus(true);
+                $result->setMsg("Cú pháp tin nhắn chính xác !");
+                $result->setMsgSyntaxList($this->msg_syntax_list);
+                $result->setData($data);
+            }
         }
         return $result->jsonSerialize();
     }
@@ -87,6 +95,9 @@ class CalculatorController extends Controller
             //lay ket qua soxo theo ngay post len
             try {
                 $results = DB::table('tbl_result_number')->whereDate('PubDate', '=', $dt_pub_date)->first();
+                if (!$results){
+                    return false;
+                }
                 $xs_live = preg_split('/\r\n|\r|\n/', $results->Description);
                 array_shift($xs_live);
             } catch (\Exception $e) {
@@ -144,12 +155,12 @@ class CalculatorController extends Controller
     //hàm tính đoạn tin nhắn con trả mảng kết quả.
     public function parserMsg($tin_nhan,$cash_out,$ket_qua_so_xo){
         $return_list = array();
-        $tin_nhan =  new String($tin_nhan);
+        $tin_nhan =  new MyString($tin_nhan);
         $tin_nhan->trimS();
         $point_group = $tin_nhan->explode(" ");
         if(count($point_group) > 0){
             foreach ($point_group as $key=>$value){
-                $str = new String($value);
+                $str = new MyString($value);
                 $obj_result_vm = new ResultViewModel($value);
                 $index = $str->firstIndexOf("x");
                 $point_vali = $str->subString($index);
@@ -308,7 +319,7 @@ class CalculatorController extends Controller
     public function syntaxChildValidate($syntaxChild){
         $errorList = array();
         $syntaxChild = is_string($syntaxChild) ? trim($syntaxChild) : "";
-        $syntaxChild = new String($syntaxChild);
+        $syntaxChild = new MyString($syntaxChild);
         if ($syntaxChild->length() > 0){
             $syntaxChildList = explode(" ",$syntaxChild->get());
             foreach ($syntaxChildList as $item) {
@@ -319,7 +330,7 @@ class CalculatorController extends Controller
                     if (!$d){
                         $errorList[] = $item;
                     }else{
-                        $item_clone = new String($item);
+                        $item_clone = new MyString($item);
                         $x_index = $item_clone->firstIndexOf("x");
                         $x_sub = $item_clone->subString($x_index);
                         $number_only = preg_replace("/[^0-9]/", "", $item_clone->get());

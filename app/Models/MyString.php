@@ -2,14 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: Dev-1
- * Date: 01/03/2018
- * Time: 21:34
+ * Date: 14/04/2018
+ * Time: 06:26
  */
 
 namespace App\Models;
 
-//Đối tượng chuỗi và các hàm xử lý chuỗi
-class Stringx
+
+class MyString
 {
     private $value;
     /**

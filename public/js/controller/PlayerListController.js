@@ -5,15 +5,15 @@
         .module('randomNumberApp')
         .controller('PlayerListController', PlayerListController);
 
-    PlayerListController.$inject = ['$scope','PlayerSvc','$uibModal','toastr'];
+    PlayerListController.$inject = ['$scope','PlayerSvc','ActionTypeSvc','$uibModal','toastr'];
 
-    function PlayerListController($scope,$playerSvc,$uibModal,toastr) {
+    function PlayerListController($scope,$playerSvc,$actionTypeSvc,$uibModal,toastr) {
         $scope.title = 'PlayerListController';
-
+        $scope.players = [];
         var formLoad = function ()
         {
-            $playerSvc.getAll().then(function (item) {
-                console.log(item);
+            $playerSvc.getAll().then(function (items) {
+                _.set($scope,"players",items)
             });
         }
         formLoad();
@@ -36,6 +36,25 @@
                             toastr.error("Fail".ERROR, 'Lỗi');
                         }
                     });
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        }
+        $scope.cashOutInfo = function (playerId) {
+            return $uibModal
+                .open({
+                    templateUrl: "template/Modal/cashOutForm.html",
+                    controller: "CreateCashOutCtrl",
+                    size: "lg",
+                    resolve: {
+                        $player: playerId,
+                        $PlayerSvc : $playerSvc,
+                        $actionTypeSvc:$actionTypeSvc
+                    }
+                })
+                .result.then(function (result) {
+
                 })
                 .catch(function (e) {
                     console.log(e);

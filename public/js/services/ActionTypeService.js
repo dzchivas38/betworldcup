@@ -6,7 +6,7 @@
 
     angular
         .module('randomNumberApp')
-        .factory('PlayerSvc', pl);
+        .factory('ActionTypeSvc', pl);
 
     pl.$inject = ['$http', '$q'];
 
@@ -14,33 +14,18 @@
         var service = {
             getById: getById,
             getAll:getAll,
-            createPlayer:createPlayer,
-            getCashOutByPlayerId:getCashOutByPlayerId,
-            modalGetCashOutPostId:modalGetCashOutPostId,
-            createCashOutApi:createCashOutApi
+            createActionType:createActionType,
         };
 
         return service;
         function getAll() {
-            var url = 'api-get-player';
+            var url = 'api-get-action-type';
             return getMethodService(url,null);
-        }
-        function getCashOutByPlayerId(playerId) {
-            var url = 'api-get-cash-out-by-pid/' + playerId;
-            return getMethodService(url,null);
-        }
-        function modalGetCashOutPostId(data) {
-            var url = 'api-modal-get-cash-out-post-id/';
-            return postMethodService(url,data);
-        }
-        function createCashOutApi(data) {
-            var url = 'api-create-cash-out/';
-            return postMethodService(url,data);
         }
         function getById(id) {
 
         }
-        function createPlayer() {
+        function createActionType() {
             var result= {
                 success:true
             };
@@ -74,10 +59,7 @@
                     },
                 })
                 .then(function onSuccess(response) {
-                    if (_.get(response,"data.d")){
-                        dfd.resolve(_.get(response, "data"));
-                    }
-                    dfd.resolve(_.get(response, "data"));
+                    dfd.resolve(_.get(response, "data.d"));
                 })
                 .catch(function onError(response) {
                     console.log(response);

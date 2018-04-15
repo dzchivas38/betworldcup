@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CashOut;
 use App\Models\HashMap;
 use App\Models\Messenger;
+use App\Models\MyString;
 use App\Models\ResultViewModel;
-use App\Models\String;
 use App\Models\Syntax;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -19,7 +20,18 @@ class HomeController extends Controller
 {
 
     public function test3(){
-        var_dump(ctype_digit("00"));
+        $cashOut = new CashOut();
+        $cashOut->setActionTypeId(1);
+        $cashOut->setPlayerId(22);
+        $cashOut->setInCoin(2);
+        $cashOut->setOutCoin(2);
+        try{
+            $result = DB::table('tbl_cashout')->insert($cashOut->jsonSerialize());
+            dd($result);
+            return $result;
+        }catch (\Exception $e){
+            return $e->getMessage();
+        }
     }
     public function test()
     {
@@ -80,12 +92,12 @@ class HomeController extends Controller
     //hàm tính đoạn tin nhắn con trả mảng kết quả.
     public function parserMsg($tin_nhan,$cash_out,$ket_qua_so_xo){
         $return_list = array();
-        $tin_nhan =  new String($tin_nhan);
+        $tin_nhan =  new MyString($tin_nhan);
         $tin_nhan->trimS();
         $point_group = $tin_nhan->explode(" ");
         if(count($point_group) > 0){
             foreach ($point_group as $key=>$value){
-                $str = new String($value);
+                $str = new MyString($value);
                 $obj_result_vm = new ResultViewModel($value);
                 $index = $str->firstIndexOf("x");
                 $point_vali = $str->subString($index);
