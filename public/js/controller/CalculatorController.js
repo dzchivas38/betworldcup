@@ -74,6 +74,7 @@
         var vm={};
         // truyền vào: msg,pubdate,customer
         $scope.process = function () {
+            $scope.kqDetailTmp = null;
             if (!_.get($scope,"request.player.Id")){
                 toastr.warning("Vui lòng nhập khách hàng !","Cảnh báo");
                 return;
@@ -114,8 +115,14 @@
                             var kqcc = _.sumBy(toArr,function(o){return o.kq});
                             var pushItem = {
                                 player: _.get($scope,"request.player"),
-                                kqcc : kqcc
+                                kqcc : kqcc,
+                                detail:toArr
                             }
+                            $scope.kqDetailTmp = _.map(item.data,function (obj) {
+                               obj.str_so_trung = obj.so_trung + "";
+                               obj.str_so_danh = obj.so_danh + "";
+                               return obj;
+                            });
                             $scope.kqListItem.push(pushItem);
                             $scope.kqListItemDetail.push(groupByActionType);
                         }

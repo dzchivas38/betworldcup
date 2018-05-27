@@ -11,6 +11,7 @@
         var service = {
             getById: getById,
             getAll:getAll,
+            createSyntax:createSyntax
         };
 
         return service;
@@ -20,6 +21,10 @@
         }
         function getById(id) {
 
+        }
+        function createSyntax(data) {
+            var url = 'api-create-syntax/';
+            return postMethodService(url,data);
         }
         function getMethodService(restUrl,data) {
             var dfd = $q.defer();
@@ -49,7 +54,7 @@
                     },
                 })
                 .then(function onSuccess(response) {
-                    dfd.resolve(_.get(response, "data.d"));
+                    dfd.resolve(_.get(response, "data"));
                 })
                 .catch(function onError(response) {
                     console.log(response);

@@ -67,8 +67,64 @@
                     </button>
                 </div>
                 <div class="col-sm-12 col-xs-12">
+                    <h2>Kết quả vừa tính</h2>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div style="border: 1px solid blue;margin: 10px;padding: 10px;" ng-repeat="item in kqDetailTmp">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-4">
+                                <span>{{item.action_type}}:</span>
+                            </div>
+                            <div class="col-sm-8 col-xs-8">
+                                <span>{{item.msg}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-4">
+                                <span>Số đánh</span>
+                            </div>
+                            <div class="col-sm-8 col-xs-8">
+                                <span>{{item.str_so_danh}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-4">
+                                <span>Số trúng</span>
+                            </div>
+                            <div class="col-sm-8 col-xs-8">
+                                <span>{{item.str_so_trung}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-4">
+                                <span>Giá trị đánh</span>
+                            </div>
+                            <div class="col-sm-8 col-xs-8">
+                                <span>{{item.sum}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-4">
+                                <span>Giá trị trúng</span>
+                            </div>
+                            <div class="col-sm-8 col-xs-8">
+                                <span>{{item.bingo}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-4">
+                                <span>Kết quả đánh</span>
+                            </div>
+                            <div class="col-sm-8 col-xs-8">
+                                <span>{{item.kq_cc}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12">
                     <h2>Kết quả</h2>
                 </div>
+
                 <div class="col-sm-12 col-xs-12">
                     <div class="table-responsive">
                         <div class="table-scrollable thin">
@@ -86,12 +142,7 @@
                                     <td>{{$index}}</td>
                                     <td>{{item.player.Name}}</td>
                                     <td>{{item.kqcc}}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-green" type="button">
-                                            <span>Chi tiết</span>
-                                            <i class="icon-info" style="color: royalblue"></i>
-                                        </button>
-                                    </td>
+                                    <td></td>
                                 </tr>
                                 </tbody>
                             </table>

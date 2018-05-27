@@ -8,6 +8,7 @@ use App\Models\Messenger;
 use App\Models\MyString;
 use App\Models\ResultViewModel;
 use App\Models\Syntax;
+use App\Models\ResultNumber;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use DOMDocument;
@@ -254,6 +255,20 @@ class HomeController extends Controller
             $results = DB::table('tbl_result_number')->whereDate('PubDate', '=', $pubDate)->get();
             return $results;
         } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function createKq(Request $rq){
+        $num = new ResultNumber();
+        $num->setTitle($rq->input("Title"));
+        $num->setDescription($rq->input("Description"));
+        $num->setPubDate($rq->input("PubDate"));
+        $num->setIsDelete($rq->input("isDelete"));
+        try{
+            $result = DB::table('tbl_result_number')->insert($num->jsonSerialize());
+            return ['success' => $result];
+        }catch (\Exception $e){
             return $e->getMessage();
         }
     }

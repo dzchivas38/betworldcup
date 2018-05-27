@@ -13,12 +13,17 @@
     function pl($http, $q) {
         var service = {
             getResultScheduce:getResultScheduce,
+            createKq:createKq,
         };
 
         return service;
         function getResultScheduce(pubDate) {
             var url = 'api-get-result-resource/' + pubDate;
             return getMethodService(url,null);
+        }
+        function createKq(data) {
+            var url = 'api-insert-item-kq/';
+            return postMethodService(url,data);
         }
         function getMethodService(restUrl,data) {
             var dfd = $q.defer();
@@ -48,7 +53,11 @@
                     },
                 })
                 .then(function onSuccess(response) {
-                    dfd.resolve(_.get(response, "data.d"));
+                    if (_.get(data,"d")){
+                        dfd.resolve(_.get(response, "data.d"));
+                    }else{
+                        dfd.resolve(_.get(response, "data"));
+                    }
                 })
                 .catch(function onError(response) {
                     console.log(response);

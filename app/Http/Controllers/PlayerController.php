@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CashOut;
+use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -61,6 +62,20 @@ class PlayerController extends Controller
         $cashOut->setOutCoin($rq->input('OutCoin'));
         try{
             $result = DB::table('tbl_cashout')->insert($cashOut->jsonSerialize());
+            return ['success' => $result];
+        }catch (\Exception $e){
+            return $e->getMessage();
+        }
+    }
+    public function createPlayer(Request $rq){
+        $player = new Player();
+        $player->setName($rq->input("Name"));
+        $player->setPhoneNumber($rq->input("PhoneNumber"));
+        $player->setPlayerTypeId($rq->input("PlayerTypeId"));
+        $player->setIsDelete($rq->input("isDelete"));
+        $player->setDescription($rq->input("Description"));
+        try{
+            $result = DB::table('tbl_player')->insert($player->jsonSerialize());
             return ['success' => $result];
         }catch (\Exception $e){
             return $e->getMessage();

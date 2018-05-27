@@ -27,11 +27,11 @@
                     controller: "CreateActionTypeCtrl",
                     size: "lg",
                     resolve: {
-                        $actionType: { Id: 0 }
+                        $actionType: { Id: 0 },
                     }
                 })
                 .result.then(function (result) {
-                    toastr.success("OK", 'Thành công');
+                    formLoad();
                 })
                 .catch(function (e) {
                     console.log(e);

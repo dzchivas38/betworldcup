@@ -40,11 +40,9 @@
         function getById(id) {
 
         }
-        function createPlayer() {
-            var result= {
-                success:true
-            };
-            return result;
+        function createPlayer(data) {
+            var url = 'api-create-player/';
+            return postMethodService(url,data);
         }
         function getMethodService(restUrl,data) {
             var dfd = $q.defer();
