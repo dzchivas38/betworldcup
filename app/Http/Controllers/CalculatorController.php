@@ -186,7 +186,7 @@ class CalculatorController extends Controller
                     switch ($cash_out->ActionTypeLevel)
                     {
                         case 0 :
-                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,false,0,0);
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,2,false,0,0);
                             break;
                         default:
                             echo "Không tìm thấy";
@@ -197,13 +197,16 @@ class CalculatorController extends Controller
                     switch ($cash_out->ActionTypeLevel)
                     {
                         case 1 : // lô thường
-                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,true,null,0);
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,2,true,null,0);
                             break;
                         case 2 : // xiên 2
-                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,true,null,2);
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,2,true,null,2);
                             break;
-                        case 3 : // xiên 2
-                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,true,null,3);
+                        case 3 : // xiên 3
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,2,true,null,3);
+                            break;
+                        case 4 : // xiên 3
+                            $bingo_list = $this->getResultFormRList($num_list,$ket_qua_so_xo,2,2,true,null,4);
                             break;
                         default:
                             echo "Không tìm thấy";
@@ -224,6 +227,8 @@ class CalculatorController extends Controller
                 $obj_result_vm->setKqCc($kq_cc);
                 $obj_result_vm->setActionType($cash_out->Code);
                 $obj_result_vm->setSoDanh($num_list);
+                $obj_result_vm->setValue($vali);
+                $obj_result_vm->setActionTypeName($cash_out->Name);
                 $return_list[] = $obj_result_vm->jsonSerialize();
             }
         }
@@ -231,20 +236,23 @@ class CalculatorController extends Controller
     }
     //hàm tìm số trong mảng kết quả dạng arr(arr) trả về mảng những số có trong danh sách
     //r_list là mảng kết quả xổ số đã gia công
-    private function getResultFormRList($num_list,$r_list,$offset,$check_all,$vi_tri_check,$xien_may){
+    //$check_point : vị trí check tính từ cuối số check, bắt đầu từ 1, vd đề 2 số cuối thì check_point là 2
+    //$offset là độ dài số cần check
+    //xien_may là số lượng số cần check ví dụ xien2 là check 2 số
+    private function getResultFormRList($num_list,$r_list,$check_point,$offset,$check_all,$vi_tri_check,$xien_may){
         $re_list = array();
         if ($check_all){
             foreach ($num_list as $num){
                 foreach ($r_list as $result){
                     if (is_array($result)){
                         foreach ($result as $r){
-                            $d = substr($r,strlen($r) - $offset,$offset);
+                            $d = substr($r,strlen($r) - $check_point,$offset);
                             if ($num == $d){
                                 $re_list[] = $num;
                             }
                         }
                     }else{
-                        $d = substr($result,strlen($result) - $offset,$offset);
+                        $d = substr($result,strlen($result) - $check_point,$offset);
                         if ($num == $d){
                             $re_list[] = $num;
                         }
@@ -255,13 +263,13 @@ class CalculatorController extends Controller
             $item = "";
             if (!is_array($r_list[$vi_tri_check])){
                 $res = $r_list[$vi_tri_check];
-                $item = substr($res,strlen($res) - $offset,$offset);
+                $item = substr($res,strlen($res) - $check_point,$offset);
             }
             foreach ($num_list as $num){
                 if (is_array($r_list[$vi_tri_check])){
                     $res = $r_list[$vi_tri_check];
                     foreach ($res as $r){
-                        $d = substr($r,strlen($r) - $offset,$offset);
+                        $d = substr($r,strlen($r) - $check_point,$offset);
                         if ($num == $d){
                             $re_list[] = $num;
                         }

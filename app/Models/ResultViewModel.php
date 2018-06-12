@@ -18,7 +18,8 @@ class ResultViewModel
     private $so_trung;
     private $kq_cc;
     private $action_type;
-
+    private $action_type_name;
+    private $value;
     /**
      * ResultViewModel constructor.
      * @param $msg
@@ -140,6 +141,38 @@ class ResultViewModel
         $this->action_type = $action_type;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActionTypeName()
+    {
+        return $this->action_type_name;
+    }
+
+    /**
+     * @param mixed $action_type_name
+     */
+    public function setActionTypeName($action_type_name)
+    {
+        $this->action_type_name = $action_type_name;
+    }
+
     public function jsonSerialize() {
         return [
             'msg' => $this->msg,
@@ -148,7 +181,9 @@ class ResultViewModel
             'so_danh' => $this->so_danh,
             'so_trung' => $this->so_trung,
             'kq_cc' => $this->kq_cc,
-            'action_type'=>$this->action_type
+            'action_type'=>$this->action_type,
+            'value'=>$this->value,
+            'action_type_name'=>$this->action_type_name
         ];
     }
 }

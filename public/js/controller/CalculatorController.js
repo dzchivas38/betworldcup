@@ -117,10 +117,28 @@
                                 player: _.get($scope,"request.player"),
                                 kqcc : kqcc,
                                 detail:toArr
-                            }
+                            };
+                            $scope.kqcc_view = _.clone(kqcc);
                             $scope.kqDetailTmp = _.map(item.data,function (obj) {
                                obj.str_so_trung = obj.so_trung + "";
                                obj.str_so_danh = obj.so_danh + "";
+                               obj.allValue = _.get(obj,"so_danh.length")*_.get(obj,"value");
+                               var highlight =  _.map(obj.so_danh,function (so_danh) {
+                                   var _return = {
+                                       so_danh: so_danh
+                                   };
+                                  var check = _.some(obj.so_trung,function (so_trung) {
+                                     return so_danh == so_trung;
+                                  });
+                                  if(check){
+                                      _return.highlight = true;
+                                      return _return;
+                                  }else {
+                                      _return.highlight = false;
+                                      return _return;
+                                  }
+                               });
+                               obj.highlight = highlight;
                                return obj;
                             });
                             $scope.kqListItem.push(pushItem);
