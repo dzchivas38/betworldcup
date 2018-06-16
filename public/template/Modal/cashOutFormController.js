@@ -9,13 +9,14 @@
 
     function mk($scope, $uibModalInstance,$player,$playerSvc,$actionTypeSvc,toastr) {
         $scope.Title = "Tỉ lệ triết khấu khách hàng " + _.get($player,"Name");
+        $scope.indexLine = -1;
         $scope.cashOutList = [];
         $scope.actionTypeList = [];
         $scope.actionTypePick = {};
         $scope.cashOut = {};
+        $scope.actionTypePickToEdit = {};
         var vm = {};
         var formLoad = function () {
-            $scope.actionTypePick = {};
             $actionTypeSvc.getAll().then(function (items) {
                 _.set($scope,"actionTypeList",items);
                 $(function () {
@@ -36,6 +37,7 @@
                             console.log($scope.actionTypePick);
                         });
                     });
+
                 });
             });
             var param = {PlayerId : $player.Id};
@@ -73,5 +75,49 @@
         function validateForm() {
             
         }
+        $scope.editItem = function (index,item) {
+            $scope.indexLine = index;
+            $(function () {
+                vm.msCaActionEdit = $('#ms-ca-action-edit-'+index).magicSuggest({
+                    data: $scope.actionTypeList,
+                    expandOnFocus: true,
+                    maxDropHeight: 145,
+                    placeholder: 'Chọn loại chơi',
+                    valueField: 'Id',
+                    editable: false,
+                    displayField: 'Name',
+                    maxSelection: 1
+                });
+                $(vm.msCaActionEdit).on('selectionchange', function () {
+                    var temp = this.getSelection();
+                    $scope.$apply(function () {
+                        _.set($scope,"actionTypePickToEdit",_.clone(temp[0]));
+                        console.log($scope.actionTypePickToEdit);
+                    });
+                });
+                var selection = _.find($scope.actionTypeList,function (actt) {
+                   return actt.Code == item.Code;
+                });
+                vm.msCaActionEdit.setSelection(selection);
+                _.set($scope,"actionTypePickToEdit",selection);
+            })
+        };
+        $scope.saveItem = function (item) {
+            if (_.get(item,"Id") > 0){
+                $scope.indexLine = -1;
+                var cashOut = {
+                    Id: _.get(item,"Id"),
+                    ActionTypeId : _.get($scope,"actionTypePickToEdit.Id"),
+                    PlayerId:_.get($player,"Id"),
+                    InCoin : _.get(item,"InCoin"),
+                    OutCoin : _.get(item,"OutCoin")
+                }
+                $playerSvc.updateCashOutApi(cashOut).then(function (item) {
+                    console.log(item);
+                })
+            }else {
+
+            }
+        };
     }
 })();

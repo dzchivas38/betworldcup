@@ -17,25 +17,20 @@
             });
         }
         formLoad();
-        $scope.createPlayerUi = function () {
+        $scope.createPlayerUi = function (Id) {
+            var _Id = (Id > 0) ? Id : 0;
             return $uibModal
                 .open({
                     templateUrl: "template/Modal/playerForm.html",
                     controller: "CreatePlayerCtrl",
                     size: "lg",
                     resolve: {
-                        $player: { Id: 0 }
+                        $player: { Id: _Id }
                     }
                 })
                 .result.then(function (result) {
-                    $playerSvc.createPlayer(result).then(function (item) {
-                        if (_.get(item, "success")) {
-                            toastr.success("OK", 'Thành công');
-                            formLoad();
-                        } else {
-                            toastr.error("Fail".ERROR, 'Lỗi');
-                        }
-                    });
+                    console.log(result);
+                    formLoad();
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -59,6 +54,37 @@
                 .catch(function (e) {
                     console.log(e);
                 });
+        }
+        $scope.delteItem = function (Id) {
+            if (Id > 0){
+                return $uibModal
+                    .open({
+                        templateUrl: "template/Modal/confirmDelete.html",
+                        controller: "ConfirmDeleteCtrl",
+                        size: "sm",
+                        resolve: {
+
+                        }
+                    })
+                    .result.then(function (result) {
+                        if (result){
+                            var obj = {Id : Id};
+                            $playerSvc.deleteItem(obj).then(function (item) {
+                                if (item.success > 0){
+                                    toastr.success("Success","Xóa bản ghi thành công");
+                                    formLoad();
+                                }else {
+                                    toastr.watch("warning","Không có bản ghi nào được xóa !");
+                                }
+                            });
+                        }else {
+
+                        }
+                    })
+                    .catch(function (e) {
+                        console.log(e);
+                    });
+            }
         }
     }
 })();

@@ -15,9 +15,12 @@
             getById: getById,
             getAll:getAll,
             createPlayer:createPlayer,
+            updateCashOutApi:updateCashOutApi,
             getCashOutByPlayerId:getCashOutByPlayerId,
             modalGetCashOutPostId:modalGetCashOutPostId,
-            createCashOutApi:createCashOutApi
+            createCashOutApi:createCashOutApi,
+            deleteItem:deleteItem,
+            updateItem:updateItem,
         };
 
         return service;
@@ -37,11 +40,24 @@
             var url = 'api-create-cash-out/';
             return postMethodService(url,data);
         }
-        function getById(id) {
-
+        function updateCashOutApi(data) {
+            var url = 'api-modal-update-cash-out/';
+            return postMethodService(url,data);
+        }
+        function getById(data) {
+            var url = "api-get-player-by-id/";
+            return postMethodService(url,data)
         }
         function createPlayer(data) {
             var url = 'api-create-player/';
+            return postMethodService(url,data);
+        }
+        function deleteItem(data) {
+            var url = 'api-delete-player/';
+            return postMethodService(url,data);
+        }
+        function updateItem(data) {
+            var url = 'api-update-player/';
             return postMethodService(url,data);
         }
         function getMethodService(restUrl,data) {

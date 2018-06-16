@@ -15,6 +15,8 @@
             getById: getById,
             getAll:getAll,
             createActionType:createActionType,
+            deleteItem:deleteItem,
+            updatteItem:updatteItem
         };
 
         return service;
@@ -27,6 +29,14 @@
         }
         function createActionType(data) {
             var url = 'api-create-action-type/';
+            return postMethodService(url,data);
+        }
+        function deleteItem(data) {
+            var url = 'api-delete-action-type/';
+            return postMethodService(url,data);
+        }
+        function updatteItem(data) {
+            var url = 'api-update-action-type/';
             return postMethodService(url,data);
         }
         function getMethodService(restUrl,data) {

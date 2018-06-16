@@ -41,6 +41,7 @@
         <script src="{!! url('template/Modal/actionTypeFormController.js') !!}"></script>
         <script src="{!! url('template/Modal/cashOutFormController.js') !!}"></script>
         <script src="{!! url('template/Modal/syntaxFormController.js') !!}"></script>
+        <script src="{!! url('template/Modal/confirmDeleteController.js') !!}"></script>
         {{---------------------------ENDMODAL-----------------------------}}
 
         {{--------------------------SERVICES------------------------------}}

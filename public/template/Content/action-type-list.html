@@ -5,7 +5,7 @@
                 <span class="caption-subject">Quản lý loại chơi</span>
             </div>
             <div class="col-sm-6 col-xs-6">
-                <button class="btn btn-sm btn-action-create" type="button" ng-click="createActionTypeUi()">
+                <button class="btn btn-sm btn-action-create" type="button" ng-click="createActionTypeUi(0)">
                     <i class="icon-graph"></i>
                     <span>Thêm loại chơi</span>
                 </button>
@@ -39,10 +39,10 @@
                                 <td>{{atype.IsFirstChirld}}</td>
                                 <td>{{atype.Description}}</td>
                                 <td>
-                                    <button class="btn btn-sm" type="button">
+                                    <button class="btn btn-sm" type="button" ng-click="createActionTypeUi(atype.Id)">
                                         <i class="icon-note" style="color: royalblue"></i>
                                     </button>
-                                    <button class="btn btn-sm" type="button">
+                                    <button class="btn btn-sm" type="button" ng-click="delteItem(atype.Id)">
                                         <i class="icon-trash" style="color: red"></i>
                                     </button>
                                 </td>

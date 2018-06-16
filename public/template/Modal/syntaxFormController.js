@@ -36,6 +36,17 @@
                         _.set($scope,"syntax.ActionTypeId",_.clone(_.get(temp[0],"Id")));
                         _.set($scope,"syntax.SyntaxForm",_.clone(_.get(temp[0],"Code")));
                     });
+                    if (_.get($scope,"syntax.Id") > 0){
+                        $syntaxSvc.getById({Id:_.get($scope,"syntax.Id")}).then(function (item) {
+                            _.set($scope,"syntax",item[0]);
+                            var selection = _.find($scope.actpList,function (actp) {
+                               return actp.Code == item[0].SyntaxForm;
+                            });
+                            if (_.get(selection,"Id") > 0){
+                                vm.msCaSyntax.setSelection(selection);
+                            }
+                        });
+                    }
                 });
             });
         }
@@ -48,21 +59,33 @@
                 toastr.warning("Chưa nhập đủ thông tin","Cảnh báo");
                 return;
             }
-            var syntax = {
-                Name: _.get($scope,"syntax.Name"),
-                ActionTypeId: _.get($scope,"syntax.ActionTypeId"),
-                Description: _.get($scope,"syntax.Description"),
-                SyntaxForm: _.get($scope,"syntax.SyntaxForm"),
-            };
-            $syntaxSvc.createSyntax(syntax).then(function (items) {
-                if(_.get(items,"success")){
-                    toastr.success("Cú pháp đã được thêm mới thành công","Success");
-                    formLoad();
-                }else{
-                    toastr.error("Đã có lỗi xảy ra, vui lòng liên hệ administrator để được hỗ trợ","ERROR 404");
-                }
-            });
+            if (_.get($scope,"syntax.Id") > 0){
+                $syntaxSvc.updateItem($scope.syntax).then(function (synx) {
+                    if(_.get(items,"success")){
+                        toastr.success("Cú pháp đã được thêm mới thành công","Success");
+                        formLoad();
+                    }else{
+                        toastr.error(synx,"ERROR 404");
+                    }
+                });
+            }else{
+                var syntax = {
+                    Name: _.get($scope,"syntax.Name"),
+                    ActionTypeId: _.get($scope,"syntax.ActionTypeId"),
+                    Description: _.get($scope,"syntax.Description"),
+                    SyntaxForm: _.get($scope,"syntax.SyntaxForm"),
+                };
+                $syntaxSvc.createSyntax(syntax).then(function (items) {
+                    if(_.get(items,"success")){
+                        toastr.success("Cú pháp đã được thêm mới thành công","Success");
+                        formLoad();
+                    }else{
+                        toastr.error("Đã có lỗi xảy ra, vui lòng liên hệ administrator để được hỗ trợ","ERROR 404");
+                    }
+                });
+            }
             $uibModalInstance.close();
         }
+
     }
 })();

@@ -23,14 +23,15 @@
                _.set($scope,"syntaxList",items);
             });
         };
-        $scope.createSyntaxUi = function () {
+        $scope.createSyntaxUi = function (Id) {
+            var _Id = (Id > 0 ) ? Id : 0;
             return $uibModal
                 .open({
                     templateUrl: "template/Modal/syntaxForm.html",
                     controller: "CreateSyntaxCtrl",
                     size: "lg",
                     resolve: {
-                        $syntax: { Id: 0 },
+                        $syntax: { Id: _Id },
                     }
                 })
                 .result.then(function (result) {
@@ -40,5 +41,36 @@
                     console.log(e);
                 });
         };
+        $scope.delteItem = function (Id) {
+            if (Id > 0){
+                return $uibModal
+                    .open({
+                        templateUrl: "template/Modal/confirmDelete.html",
+                        controller: "ConfirmDeleteCtrl",
+                        size: "sm",
+                        resolve: {
+
+                        }
+                    })
+                    .result.then(function (result) {
+                        if (result){
+                            var obj = {Id : Id};
+                            $SyntaxSvc.deleteItem(obj).then(function (item) {
+                                if (item.success > 0){
+                                    toastr.success("Success","Xóa bản ghi thành công");
+                                    formLoad();
+                                }else {
+                                    toastr.watch("warning","Không có bản ghi nào được xóa !");
+                                }
+                            });
+                        }else {
+
+                        }
+                    })
+                    .catch(function (e) {
+                        console.log(e);
+                    });
+            }
+        }
     }
 })();

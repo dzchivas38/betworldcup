@@ -32,15 +32,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-2"><input type="checkbox" style="margin-top: 5px;"
-                                                 ng-model="actionType.IsFirstChirld"/>Là giải đặc biệt</div>
+                    <div class="col-sm-4"><input type="checkbox" style="margin-top: 5px;"
+                                                ng-checked="actionType.IsFirstChirld" ng-model="actionType.IsFirstChirld"/>Không là giải đặc biệt</div>
                 </div>
                 <div class="row">
                     <span class="col-sm-12 col-xs-12 txt-gray" style="margin-top: 15px;margin-bottom: 1px;">
                         Bậc chơi
                     </span>
                     <div class="col-sm-12 col-xs-12" style="margin-top: 10px;">
-                        <input ng-model="actionType.ActionTypeLevel" type="number" class="form-control input-sm"/>
+                        <input ng-model="actionType.ActionTypeLevel" type="text" class="form-control input-sm"/>
                     </div>
                 </div>
                 <div class="row">

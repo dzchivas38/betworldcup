@@ -11,7 +11,9 @@
         var service = {
             getById: getById,
             getAll:getAll,
-            createSyntax:createSyntax
+            createSyntax:createSyntax,
+            deleteItem:deleteItem,
+            updateItem:updateItem,
         };
 
         return service;
@@ -19,11 +21,20 @@
             var url = 'api-get-syntax';
             return getMethodService(url,null);
         }
-        function getById(id) {
-
-        }
         function createSyntax(data) {
             var url = 'api-create-syntax/';
+            return postMethodService(url,data);
+        }
+        function deleteItem(data) {
+            var url = 'api-delete-syntax/';
+            return postMethodService(url,data);
+        }
+        function updateItem(data) {
+            var url = 'api-update-syntax/';
+            return postMethodService(url,data);
+        }
+        function getById(data) {
+            var url = 'api-get-syntax-by-id/';
             return postMethodService(url,data);
         }
         function getMethodService(restUrl,data) {

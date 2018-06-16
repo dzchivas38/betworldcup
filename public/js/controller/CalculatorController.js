@@ -50,11 +50,12 @@
                     _.set($scope,"playerList",items);
                     vm.msCaPlayer = $('#ms-ca-player').magicSuggest({
                         data: $scope.playerList,
+                        allowFreeEntries: true,
                         expandOnFocus: true,
+                        editable: false,
                         maxDropHeight: 145,
                         placeholder: 'Chọn khách hàng',
                         valueField: 'Id',
-                        editable: false,
                         displayField: 'Name',
                         maxSelection: 1
                     });

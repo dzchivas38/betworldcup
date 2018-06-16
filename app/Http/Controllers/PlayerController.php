@@ -16,6 +16,15 @@ class PlayerController extends Controller
         $users = DB::select('select * from tbl_player');
         return $users;
     }
+    public function getById(Request $rq){
+        $Id = $rq->input("Id");
+        try {
+            $results = DB::table('tbl_player')->where('Id', '=', $Id)->get();
+            return $results;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
     public function getCashOutByPlayerId($playerId){
         try{
             $player_join_cash_out = DB::table('tbl_player')
@@ -67,6 +76,23 @@ class PlayerController extends Controller
             return $e->getMessage();
         }
     }
+    public function updateCashOut(Request $rq){
+        $Id = $rq->input("Id");
+        $cashOut = new CashOut();
+        $cashOut->setActionTypeId($rq->input('ActionTypeId'));
+        $cashOut->setId($rq->input('Id'));
+        $cashOut->setPlayerId($rq->input('PlayerId'));
+        $cashOut->setInCoin($rq->input('InCoin'));
+        $cashOut->setOutCoin($rq->input('OutCoin'));
+        try{
+            $result = DB::table('tbl_cashout')
+                ->where('id', $Id)
+                ->update($cashOut->jsonSerialize());
+            return ['success' => $result];
+        }catch (\Exception $e){
+            return $e->getMessage();
+        }
+    }
     public function createPlayer(Request $rq){
         $player = new Player();
         $player->setName($rq->input("Name"));
@@ -76,6 +102,33 @@ class PlayerController extends Controller
         $player->setDescription($rq->input("Description"));
         try{
             $result = DB::table('tbl_player')->insert($player->jsonSerialize());
+            return ['success' => $result];
+        }catch (\Exception $e){
+            return $e->getMessage();
+        }
+    }
+    public function deleteItem(Request $rq){
+        $Id = $rq->input("Id");
+        try{
+            $result = DB::table('tbl_player')->where('Id', '=', $Id)->delete();
+            return ['success' => $result];
+        }catch (\ErrorException $e){
+            return $e->getMessage();
+        }
+    }
+    public function updateItem(Request $rq){
+        $Id = $rq->input("Id");
+        $player = new Player();
+        $player->setName($rq->input("Name"));
+        $player->setId($rq->input("Id"));
+        $player->setPhoneNumber($rq->input("PhoneNumber"));
+        $player->setPlayerTypeId(null);
+        $player->setIsDelete($rq->input(0));
+        $player->setDescription($rq->input("Description"));
+        try{
+            $result = DB::table('tbl_player')
+                ->where('id', $Id)
+                ->update($player->jsonSerialize());
             return ['success' => $result];
         }catch (\Exception $e){
             return $e->getMessage();
